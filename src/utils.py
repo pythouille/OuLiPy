@@ -1,6 +1,7 @@
 """
 This module contains functions to check properties in strings.
 """
+from collections import Counter
 import string
 from typing import List
 
@@ -93,7 +94,6 @@ def remove_accent(s: str) -> str:
             print(f"WARNING: unknown character: {c}")
     return s_copy
 
-
 def split_words(s: str) -> list[str]:
     """
     Return a list of the words in given text.
@@ -106,6 +106,28 @@ def split_words(s: str) -> list[str]:
         if w in s_copy:
             s_copy = s_copy.replace(w, ' ')
     return [w for w in s_copy.split(' ') if w]
+
+def char_counter(s: str) -> Counter:
+    """
+    Return a Counter of characters in the text,
+    including different versions of letters (with
+    accent for example), punctuation, and spaces.
+    """
+    return Counter(s)
+
+def letter_counter(s: str) -> Counter:
+    """
+    Return a Counter of letters in the text.
+
+    Spaces, punctuation, accents are discarded.
+    """
+    return Counter(remove_non_word(remove_accent(s.upper())))
+
+def word_counter(s: str) -> Counter:
+    """
+    Return a Counter of words of in the text.
+    """
+    return Counter(split_words(s))
 
 
 ####
