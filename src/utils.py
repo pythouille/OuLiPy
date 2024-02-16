@@ -23,7 +23,7 @@ accent_to_letter = { # Non exhaustive list
               'Ÿ': 'Y', 'Ý': 'Y',           'Ñ': 'N',
     'Ç': 'C',
 }
-authorized_characters = ['æ', 'œ', 'Æ', 'Œ']
+authorized_characters = ''.join(['æ', 'œ', 'Æ', 'Œ'])
 
 def remove_non_word(s: str) -> str:
     """
@@ -67,18 +67,20 @@ def is_palindrom(s: str) -> bool:
             return False
     return True
 
-low_ascender_char = [ # Accent outside the mean line
+low_ascender_char = ''.join([ # Accent outside the mean line
     'â', 'ä', 'á', 'à', 'ã',
     'ê', 'ë', 'é', 'è',
     'î', 'ï', 'í', 'ì',
     'ô', 'ö', 'ó', 'ò', 'õ',
     'û', 'ü', 'ú', 'ù', 
     'ç', 'ñ',
-]
-ascender_char = [
-    'b', 'd', 'f', 'k', 'l', 't'
-] + string.ascii_uppercase + low_ascender_char.upper()
-descender_char = ['g', 'j', 'p' 'q', 'y']
+])
+ascender_char = (
+    "bdfklt"
+    + string.ascii_uppercase
+    + low_ascender_char.upper()
+)
+descender_char = "gjpqy"
 
 def check_prisoner(s: str, allow_accent=True) -> str:
     """
