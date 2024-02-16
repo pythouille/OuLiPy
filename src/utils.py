@@ -6,6 +6,10 @@ from typing import List
 
 
 
+####
+# Global variables
+####
+
 accent_to_letter = { # Non exhaustive list
     # Lower case
     'â': 'a', 'ä': 'a', 'á': 'a', 'à': 'a', 'ã': 'a',
@@ -25,6 +29,28 @@ accent_to_letter = { # Non exhaustive list
     'Ç': 'C',
 }
 authorized_characters = ''.join(['æ', 'œ', 'Æ', 'Œ'])
+
+low_ascender_char = ''.join([ # Accent outside the mean line
+    'â', 'ä', 'á', 'à', 'ã',
+    'ê', 'ë', 'é', 'è',
+    'î', 'ï', 'í', 'ì',
+    'ô', 'ö', 'ó', 'ò', 'õ',
+    'û', 'ü', 'ú', 'ù', 
+    'ç', 'ñ',
+])
+low_descender_char = ",;"
+ascender_char = (
+    "bdfklt"
+    + "'!\"&\'()*/?[\\]^`{|}'" # Punctuation
+    + string.ascii_uppercase # Uppercase
+    + low_ascender_char.upper() # Uppercase with accent
+)
+descender_char = "gjpqy"
+
+
+####
+# Utils
+####
 
 def remove_punctuation(s: str) -> str:
     """
@@ -67,7 +93,26 @@ def remove_accent(s: str) -> str:
             print(f"WARNING: unknown character: {c}")
     return s_copy
 
-def is_palindrom(s: str) -> bool:
+
+def split_words(s: str) -> list[str]:
+    """
+    Return a list of the words in given text.
+
+    White space and punctuation are discarded.
+    """
+    # Remove punctuation and standardize white space
+    s_copy = remove_punctuation(s)
+    for w in string.whitespace:
+        if w in s_copy:
+            s_copy = s_copy.replace(w, ' ')
+    return [w for w in s_copy.split(' ') if w]
+
+
+####
+# Constraint checker
+####
+
+def check_palindrom(s: str) -> bool:
     """
     Return True if given text is a palindrom, False otherwise.
     """
@@ -79,7 +124,7 @@ def is_palindrom(s: str) -> bool:
             return False
     return True
 
-def is_lipogram(s: str, forbidden: str) -> bool:
+def check_lipogram(s: str, forbidden: str) -> bool:
     """
     Return True if given text ('s') does not contain
     any character in 'forbidden' string, False otherwise.
@@ -93,23 +138,6 @@ def is_lipogram(s: str, forbidden: str) -> bool:
         if c in forbidden:
             return False
     return True
-
-low_ascender_char = ''.join([ # Accent outside the mean line
-    'â', 'ä', 'á', 'à', 'ã',
-    'ê', 'ë', 'é', 'è',
-    'î', 'ï', 'í', 'ì',
-    'ô', 'ö', 'ó', 'ò', 'õ',
-    'û', 'ü', 'ú', 'ù', 
-    'ç', 'ñ',
-])
-low_descender_char = ",;"
-ascender_char = (
-    "bdfklt"
-    + "'!\"&\'()*/?[\\]^`{|}'" # Punctuation
-    + string.ascii_uppercase # Uppercase
-    + low_ascender_char.upper() # Uppercase with accent
-)
-descender_char = "gjpqy"
 
 def check_prisoner(s: str, allow_accent=True) -> bool:
     """
@@ -128,19 +156,6 @@ def check_prisoner(s: str, allow_accent=True) -> bool:
         if c in forbidden_char:
             return False
     return True
-
-def split_words(s: str) -> list[str]:
-    """
-    Return a list of the words in given text.
-
-    White space and punctuation are discarded.
-    """
-    # Remove punctuation and standardize white space
-    s_copy = remove_punctuation(s)
-    for w in string.whitespace:
-        if w in s_copy:
-            s_copy = s_copy.replace(w, ' ')
-    return [w for w in s_copy.split(' ') if w]
 
 def check_abecedaire(s: str) -> bool:
     """

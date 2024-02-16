@@ -19,37 +19,38 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertEqual(remove_accent("À-côtés"), "A-cotes")
         self.assertEqual(remove_accent("Deçà delà"), "Deca dela")
 
-    def test_is_palindrom(self):
-        self.assertTrue(is_palindrom(""))
-        self.assertFalse(is_palindrom("fenouil"))
-        self.assertTrue(is_palindrom("kayak"))
-        self.assertTrue(is_palindrom("XxXx")) # Not case sensitive
-        self.assertTrue(is_palindrom("x\nx x\tx   ")) # Not sensitive to white space
-        self.assertTrue(is_palindrom("x..x!x?!!x")) # Not sensitive to punctuation
-        self.assertTrue(is_palindrom("Ésope reste ici et se repose."))
-        self.assertFalse(is_palindrom("Xsope este ici et se repose."))
+    def test_palindrom(self):
+        self.assertTrue(check_palindrom(""))
+        self.assertTrue(check_palindrom("kayak"))
+        self.assertTrue(check_palindrom("Ésope reste ici et se repose."))
+        self.assertTrue(check_palindrom("XxXx")) # Not case sensitive
+        self.assertTrue(check_palindrom("x\nx x\tx   ")) # Not sensitive to white space
+        self.assertTrue(check_palindrom("x..x!x?!!x")) # Not sensitive to punctuation
+        self.assertFalse(check_palindrom("Xsope este ici et se repose."))
+        self.assertFalse(check_palindrom("fenouil"))
 
     def test_lipogram(self):
-        self.assertTrue(is_lipogram("", "e"))
-        self.assertFalse(is_lipogram("fenouil", "e"))
-        self.assertTrue(is_lipogram("kayak", "e"))
-        self.assertFalse(is_lipogram("E", "e")) # Case insensitive
-        self.assertFalse(is_lipogram("ê", "e")) # Not sensitive to accents
+        self.assertTrue(check_lipogram("", "e"))
+        self.assertTrue(check_lipogram("kayak", "e"))
+        self.assertTrue(check_lipogram("Parfois, j'ai froid.", "e"))
+        self.assertFalse(check_lipogram("fenouil", "e"))
+        self.assertFalse(check_lipogram("E", "e")) # Case insensitive
+        self.assertFalse(check_lipogram("ê", "e")) # Not sensitive to accents
 
     def test_prisoner(self):
         self.assertTrue(check_prisoner(""))
         self.assertFalse(check_prisoner("fenouil"))
         self.assertFalse(check_prisoner("fenouil", allow_accent=False))
-        self.assertFalse(check_prisoner("Xxxx."))
-        self.assertFalse(check_prisoner("cinq"))
-        self.assertFalse(check_prisoner("j"))
-        self.assertTrue(check_prisoner("un réseau"))
+        self.assertFalse(check_prisoner("Xxxx.")) # uppercase
+        self.assertFalse(check_prisoner("cinq")) # descender
+        self.assertFalse(check_prisoner("j")) # descender
+        self.assertTrue(check_prisoner("un réseau")) # 'é' allowed by default
         self.assertFalse(check_prisoner("un réseau", allow_accent=False)) # 'é'
         self.assertTrue(check_prisoner("sans un son, sans un sou"))
         self.assertFalse(check_prisoner("sans un son, sans un sou", allow_accent=False)) # ','
 
     def test_abecedaire(self):
-        self.assertFalse(check_abecedaire(""))
+        self.assertFalse(check_abecedaire("")) # Empty case
         self.assertFalse(check_abecedaire("fenouil"))
         self.assertTrue(check_abecedaire(
             "Axxx. Bxxx, cxéxxx dxx exxxx, fxxx gxxxxxx. "\
@@ -59,12 +60,12 @@ class TestIsPalindrom(unittest.TestCase):
         ))
     
     def test_kyrielle(self):
-        self.assertTrue(check_kyrielle(""))
+        self.assertTrue(check_kyrielle("")) # Empty case
         self.assertTrue(check_kyrielle("fenouil"))
-        self.assertTrue(check_kyrielle("fenouil luisant"))
-        self.assertFalse(check_kyrielle("fenouil enragé"))
-        self.assertTrue(check_kyrielle("toujours si inépuisable"))
-        self.assertTrue(check_kyrielle("Touché. En naissant !"))
+        self.assertTrue(check_kyrielle("fenouil luisant")) # l-l
+        self.assertTrue(check_kyrielle("toujours si inépuisable")) # s-s i-i
+        self.assertTrue(check_kyrielle("Touché. En naissant !")) # e-e n-n
+        self.assertFalse(check_kyrielle("fenouil enragé")) # L != E
 
 
 if __name__ == '__main__':
