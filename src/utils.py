@@ -66,3 +66,34 @@ def is_palindrom(s: str) -> bool:
         if s_copy[i] != s_copy[len(s_copy)-1-i]:
             return False
     return True
+
+low_ascender_char = [ # Accent outside the mean line
+    'â', 'ä', 'á', 'à', 'ã',
+    'ê', 'ë', 'é', 'è',
+    'î', 'ï', 'í', 'ì',
+    'ô', 'ö', 'ó', 'ò', 'õ',
+    'û', 'ü', 'ú', 'ù', 
+    'ç', 'ñ',
+]
+ascender_char = [
+    'b', 'd', 'f', 'k', 'l', 't'
+] + string.ascii_uppercase + low_ascender_char.upper()
+descender_char = ['g', 'j', 'p' 'q', 'y']
+
+def check_prisoner(s: str, allow_accent=True) -> str:
+    """
+    Return True if given string follow the 'prisoner's constraint',
+    False otherwise.
+
+    https://fr.wikipedia.org/wiki/Contrainte_du_prisonnier
+    """
+    # Build list of forbidden characters
+    forbidden_char = descender_char + ascender_char
+    if not allow_accent:
+        # Avoid accents too, if specified
+        forbidden_char = low_ascender_char
+    # Check each character
+    for c in s:
+        if c in forbidden_char:
+            return False
+    return True
