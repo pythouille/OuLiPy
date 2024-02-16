@@ -43,6 +43,22 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(check_prisoner("sans un son, sans un sou"))
         self.assertFalse(check_prisoner("sans un son, sans un sou", allow_accent=False)) # ','
 
+    def test_abecedaire(self):
+        self.assertFalse(check_abecedaire("fenouil"))
+        self.assertTrue(check_abecedaire(
+            "Axxx. Bxxx, cxéxxx dxx exxxx, fxxx gxxxxxx. "\
+            "Hxxxèx, ixxx jxxxx Kxx, lx Mx nxxxxxxxx... "\
+            "Oxxxx pxxxxx ! Qxxx Rxxx sx txxxxxxx : "\
+            "uxxx vxxxx wxxxxx xxxxxx y zxxxxxxxx."\
+        ))
+    
+    def test_kyrielle(self):
+        self.assertTrue(check_kyrielle(""))
+        self.assertTrue(check_kyrielle("fenouil"))
+        self.assertTrue(check_kyrielle("fenouil luisant"))
+        self.assertFalse(check_kyrielle("fenouil enragé"))
+        self.assertTrue(check_kyrielle("toujours si inépuisable"))
+        self.assertTrue(check_kyrielle("Touché. En naissant !"))
 
 
 if __name__ == '__main__':
