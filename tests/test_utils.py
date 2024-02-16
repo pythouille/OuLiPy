@@ -25,6 +25,13 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(is_palindrom("x..x!x?!!x")) # Not sensitive to punctuation
         self.assertTrue(is_palindrom("Ésope reste ici et se repose."))
         self.assertFalse(is_palindrom("Xsope este ici et se repose."))
+    
+    def test_prisoner(self):
+        self.assertFalse(check_prisoner("fenouil"))
+        self.assertFalse(check_prisoner("Xxxx."))
+        self.assertFalse(check_prisoner("j"))
+        self.assertTrue(check_prisoner("un réseau"))
+        self.assertFalse(check_prisoner("un réseau", allow_accent=False))
 
 
 
