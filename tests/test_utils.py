@@ -19,6 +19,13 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertEqual(remove_accent("À-côtés"), "A-cotes")
         self.assertEqual(remove_accent("Deçà delà"), "Deca dela")
 
+    def test_split_words(self):
+        self.assertEqual(split_words(""), [])
+        self.assertEqual(split_words("fenouil"), ["fenouil"])
+        self.assertEqual(split_words("Il était une fois,"), ["Il", "était", "une", "fois"])
+        #NOTE: need for treating separate cases for "'" or "-"?
+        #self.assertEqual(split_words("Aujourd'hui, c'est lundi ! Eh."), ["Aujourd'hui", "c", "est", "lundi", "Eh"])
+
     def test_palindrom(self):
         self.assertTrue(check_palindrom(""))
         self.assertTrue(check_palindrom("kayak"))
@@ -44,7 +51,6 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_monovocalism("Étre et n'être, tel est le Cerbère.", 'a'))
         self.assertFalse(check_monovocalism("fenouil"))
         self.assertFalse(check_monovocalism("kayak"))
-
 
     def test_prisoner(self):
         self.assertTrue(check_prisoner(""))
@@ -75,6 +81,7 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(check_kyrielle("toujours si inépuisable")) # s-s i-i
         self.assertTrue(check_kyrielle("Touché. En naissant !")) # e-e n-n
         self.assertFalse(check_kyrielle("fenouil enragé")) # L != E
+
 
 
 if __name__ == '__main__':
