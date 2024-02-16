@@ -5,12 +5,17 @@ from src.utils import *
 
 
 class TestIsPalindrom(unittest.TestCase):
-    def test_remove(self):
+    def test_remove_non_word(self):
         self.assertEqual(remove_non_word("fenouil"), "fenouil")
         self.assertEqual(remove_non_word("À-côtés"), "Àcôtés") # Accents
         self.assertEqual(remove_non_word("!:;,Ahah,;:!"), "Ahah") # Punctuation
         self.assertEqual(remove_non_word(" Ah  ah\t\tah\nah  "), "Ahahahah") # White space
         self.assertEqual(remove_non_word("Parfois, ou peut-être pas (!) ?"), "Parfoisoupeutêtrepas") # Both
+
+    def test_remove_accent(self):
+        self.assertEqual(remove_accent("fenouil"), "fenouil")
+        self.assertEqual(remove_accent("À-côtés"), "A-cotes")
+        self.assertEqual(remove_accent("Deçà delà"), "Deca dela")
 
     def test_is_palindrom(self):
         self.assertFalse(is_palindrom("fenouil"))
