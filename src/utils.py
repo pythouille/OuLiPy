@@ -139,6 +139,27 @@ def check_lipogram(s: str, forbidden: str) -> bool:
             return False
     return True
 
+def check_monovocalism(s: str, voyel: str = None) -> bool:
+    """
+    Return True if the text use only one voyel (monovocalism),
+    False otherwise.
+    """
+    if voyel is None:
+        # Find first voyel of the text
+        s_copy = remove_accent(s.lower())
+        for c in s_copy:
+            if c in 'aeiouy':
+                voyel = c
+                break
+        if voyel is None:
+            # No voyel found
+            return True
+    elif voyel not in 'aeiouy':
+        raise ValueError("Please chose target voyel in 'aeiuoy'.")
+    forbidden_voyels = ['a', 'e', 'i', 'o', 'u', 'y']
+    forbidden_voyels.remove(voyel)
+    return check_lipogram(s, ''.join(forbidden_voyels))
+
 def check_prisoner(s: str, allow_accent=True) -> bool:
     """
     Return True if given text follow the 'prisoner's constraint',

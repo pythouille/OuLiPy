@@ -37,6 +37,15 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_lipogram("E", "e")) # Case insensitive
         self.assertFalse(check_lipogram("ê", "e")) # Not sensitive to accents
 
+    def test_monovocalism(self):
+        self.assertTrue(check_monovocalism(""))
+        self.assertTrue(check_monovocalism("Étre et n'être, tel est le Cerbère."))
+        self.assertTrue(check_monovocalism("Étre et n'être, tel est le Cerbère.", 'e'))
+        self.assertFalse(check_monovocalism("Étre et n'être, tel est le Cerbère.", 'a'))
+        self.assertFalse(check_monovocalism("fenouil"))
+        self.assertFalse(check_monovocalism("kayak"))
+
+
     def test_prisoner(self):
         self.assertTrue(check_prisoner(""))
         self.assertFalse(check_prisoner("fenouil"))
