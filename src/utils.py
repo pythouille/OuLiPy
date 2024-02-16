@@ -67,6 +67,21 @@ def is_palindrom(s: str) -> bool:
             return False
     return True
 
+def is_lipogram(s: str, forbidden: str) -> bool:
+    """
+    Return True if given string 's' does not contain
+    any character in 'forbidden' string, False otherwise.
+
+    For example, a lipogram in 'E' must not use the letter
+    E (with or without accent, with or without uppercase).
+    """
+    s_copy = s.lower()
+    s_copy = remove_accent(s_copy)
+    for c in s_copy:
+        if c in forbidden:
+            return False
+    return True
+
 low_ascender_char = ''.join([ # Accent outside the mean line
     'â', 'ä', 'á', 'à', 'ã',
     'ê', 'ë', 'é', 'è',

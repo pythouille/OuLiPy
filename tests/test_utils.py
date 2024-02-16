@@ -25,7 +25,13 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(is_palindrom("x..x!x?!!x")) # Not sensitive to punctuation
         self.assertTrue(is_palindrom("Ésope reste ici et se repose."))
         self.assertFalse(is_palindrom("Xsope este ici et se repose."))
-    
+
+    def test_lipogram(self):
+        self.assertFalse(is_lipogram("fenouil", "e"))
+        self.assertTrue(is_lipogram("kayak", "e"))
+        self.assertFalse(is_lipogram("E", "e")) # Case insensitive
+        self.assertFalse(is_lipogram("ê", "e")) # Not sensitive to accents
+
     def test_prisoner(self):
         self.assertFalse(check_prisoner("fenouil"))
         self.assertFalse(check_prisoner("fenouil", allow_accent=False))
