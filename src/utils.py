@@ -23,6 +23,7 @@ accent_to_letter = { # Non exhaustive list
               'Ÿ': 'Y', 'Ý': 'Y',           'Ñ': 'N',
     'Ç': 'C',
 }
+authorized_characters = ['æ', 'œ', 'Æ', 'Œ']
 
 def remove_non_word(s: str) -> str:
     """
@@ -49,6 +50,7 @@ def remove_accent(s: str) -> str:
                 string.ascii_letters
                 + string.punctuation
                 + string.whitespace
+                + authorized_characters
                 ):
             print(f"WARNING: unknown character: {c}")
     return s_copy
