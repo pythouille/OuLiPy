@@ -28,10 +28,14 @@ class TestIsPalindrom(unittest.TestCase):
     
     def test_prisoner(self):
         self.assertFalse(check_prisoner("fenouil"))
+        self.assertFalse(check_prisoner("fenouil", allow_accent=False))
         self.assertFalse(check_prisoner("Xxxx."))
+        self.assertFalse(check_prisoner("cinq"))
         self.assertFalse(check_prisoner("j"))
         self.assertTrue(check_prisoner("un réseau"))
-        self.assertFalse(check_prisoner("un réseau", allow_accent=False))
+        self.assertFalse(check_prisoner("un réseau", allow_accent=False)) # 'é'
+        self.assertTrue(check_prisoner("sans un son, sans un sou"))
+        self.assertFalse(check_prisoner("sans un son, sans un sou", allow_accent=False)) # ','
 
 
 

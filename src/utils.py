@@ -75,10 +75,12 @@ low_ascender_char = ''.join([ # Accent outside the mean line
     'û', 'ü', 'ú', 'ù', 
     'ç', 'ñ',
 ])
+low_descender_char = ",;"
 ascender_char = (
     "bdfklt"
-    + string.ascii_uppercase
-    + low_ascender_char.upper()
+    + "'!\"&\'()*/?[\\]^`{|}'" # Punctuation
+    + string.ascii_uppercase # Uppercase
+    + low_ascender_char.upper() # Uppercase with accent
 )
 descender_char = "gjpqy"
 
@@ -93,7 +95,7 @@ def check_prisoner(s: str, allow_accent=True) -> str:
     forbidden_char = descender_char + ascender_char
     if not allow_accent:
         # Avoid accents too, if specified
-        forbidden_char = low_ascender_char
+        forbidden_char += low_ascender_char + low_descender_char
     # Check each character
     for c in s:
         if c in forbidden_char:
