@@ -136,11 +136,11 @@ def split_words(s: str) -> list[str]:
     White space and punctuation are discarded.
     """
     # Remove punctuation and standardize white space
-    s_copy = remove_non_word(s)
+    s_copy = remove_punctuation(s)
     for w in string.whitespace:
         if w in s_copy:
             s_copy = s_copy.replace(w, ' ')
-    return s_copy.split(' ')
+    return [w for w in s_copy.split(' ') if w]
 
 def check_abecedaire(s: str) -> bool:
     """
@@ -154,5 +154,17 @@ def check_abecedaire(s: str) -> bool:
         return False
     for c, w in zip(string.ascii_lowercase, words):
         if c != w[0]:
+            return False
+    return True
+
+def check_kyrielle(s: str) -> bool:
+    """
+    Return True if the last letter of each word
+    is the same letter as the first letter of the
+    following word ('kyrielle').
+    """
+    words = split_words(remove_accent(s.lower()))
+    for i in range(len(words)-1):
+        if words[i][-1] != words[i+1][0]:
             return False
     return True
