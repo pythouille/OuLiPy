@@ -20,11 +20,11 @@ class TestIsPalindrom(unittest.TestCase):
     def test_is_palindrom(self):
         self.assertFalse(is_palindrom("fenouil"))
         self.assertTrue(is_palindrom("kayak"))
-        #TODO
-        #self.assertTrue(is_palindrom("XxXx")) # Not case sensitive
-        #self.assertTrue(is_palindrom("x\nx x\tx   ")) # Not sensitive to white space
-        #self.assertTrue(is_palindrom("x..x!x?!!x")) # Not sensitive to punctuation
-        #self.assertTrue(is_palindrom("Ésope reste ici et se repose."))
+        self.assertTrue(is_palindrom("XxXx")) # Not case sensitive
+        self.assertTrue(is_palindrom("x\nx x\tx   ")) # Not sensitive to white space
+        self.assertTrue(is_palindrom("x..x!x?!!x")) # Not sensitive to punctuation
+        self.assertTrue(is_palindrom("Ésope reste ici et se repose."))
+        self.assertFalse(is_palindrom("Xsope este ici et se repose."))
 
 
 

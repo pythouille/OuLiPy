@@ -57,8 +57,10 @@ def is_palindrom(s: str) -> bool:
     """
     Return True if given string is a palindrom, False otherwise.
     """
-    size = len(s)
-    for i in range(size//2):
-        if s[i] != s[size-1-i]:
+    s_copy = s.lower()
+    s_copy = remove_non_word(s_copy)
+    s_copy = remove_accent(s_copy)
+    for i in range(len(s_copy)//2):
+        if s_copy[i] != s_copy[len(s_copy)-1-i]:
             return False
     return True
