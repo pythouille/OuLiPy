@@ -2,6 +2,7 @@
 This module contains functions to check properties in strings.
 """
 import string
+from typing import List
 
 
 
@@ -24,6 +25,17 @@ accent_to_letter = { # Non exhaustive list
     'Ç': 'C',
 }
 authorized_characters = ''.join(['æ', 'œ', 'Æ', 'Œ'])
+
+def remove_punctuation(s: str) -> str:
+    """
+    Return a copy of given string without
+    its punctuation.
+    """
+    s_copy = s
+    for c in string.punctuation:
+        if c in s_copy:
+            s_copy = s_copy.replace(c, '')
+    return s_copy
 
 def remove_non_word(s: str) -> str:
     """
@@ -57,7 +69,7 @@ def remove_accent(s: str) -> str:
 
 def is_palindrom(s: str) -> bool:
     """
-    Return True if given string is a palindrom, False otherwise.
+    Return True if given text is a palindrom, False otherwise.
     """
     s_copy = s.lower()
     s_copy = remove_non_word(s_copy)
@@ -69,7 +81,7 @@ def is_palindrom(s: str) -> bool:
 
 def is_lipogram(s: str, forbidden: str) -> bool:
     """
-    Return True if given string 's' does not contain
+    Return True if given text ('s') does not contain
     any character in 'forbidden' string, False otherwise.
 
     For example, a lipogram in 'E' must not use the letter
@@ -99,9 +111,9 @@ ascender_char = (
 )
 descender_char = "gjpqy"
 
-def check_prisoner(s: str, allow_accent=True) -> str:
+def check_prisoner(s: str, allow_accent=True) -> bool:
     """
-    Return True if given string follow the 'prisoner's constraint',
+    Return True if given text follow the 'prisoner's constraint',
     False otherwise.
 
     https://fr.wikipedia.org/wiki/Contrainte_du_prisonnier
@@ -114,5 +126,33 @@ def check_prisoner(s: str, allow_accent=True) -> str:
     # Check each character
     for c in s:
         if c in forbidden_char:
+            return False
+    return True
+
+def split_words(s: str) -> list[str]:
+    """
+    Return a list of the words in given text.
+
+    White space and punctuation are discarded.
+    """
+    # Remove punctuation and standardize white space
+    s_copy = remove_non_word(s)
+    for w in string.whitespace:
+        if w in s_copy:
+            s_copy = s_copy.replace(w, ' ')
+    return s_copy.split(' ')
+
+def check_abecedaire(s: str) -> bool:
+    """
+    Return True if all 26 words in given text
+    begin with the successive letters in latin
+    alphabet (an 'abécédaire'), False otherwise. 
+    """
+    # Remove accent, uppercase, and get words only
+    words = split_words(remove_accent(s.lower()))
+    if len(words) != 26:
+        return False
+    for c, w in zip(string.ascii_lowercase, words):
+        if c != w[0]:
             return False
     return True
