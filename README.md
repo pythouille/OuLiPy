@@ -15,3 +15,10 @@ On trouvera de très bons outils de ce genre sur les sites de :
 ## Contributions
 
 Toute suggestion est la bienvenue. N'hésitez pas à ouvrir une *issue* pour signaler un bug ou demander une nouvelle fonctionnalité.
+
+## Tests
+
+Pour lancer les tests :
+```
+python -m unittest
+```
