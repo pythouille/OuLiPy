@@ -125,7 +125,7 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_anagram("abc", "aabc")) # Missing letter
         self.assertFalse(check_anagram("abc", "abd")) # Changing letter
 
-    def test_anagram(self):
+    def test_subanagram(self):
         self.assertTrue(check_subanagram("", "")) # Empty case
         self.assertTrue(check_subanagram("a", "abc"))
         self.assertTrue(check_subanagram("abc", "aaabc"))
@@ -135,6 +135,12 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(check_subanagram("eee", "Éeêè")) # All letters included
         self.assertFalse(check_subanagram("eeee", "Éeê")) # Not enough letters
         self.assertFalse(check_subanagram("abc", "abd")) # Missing C in reference
+
+    def test_pangram(self):
+        self.assertTrue(check_pangram("Portez ce whisky au vieux juge blond qui fume."))
+        self.assertFalse(check_pangram("Portez ce whisky au vieux juge blond qui gambade."))
+        self.assertFalse(check_pangram(""))
+        self.assertFalse(check_pangram("fenouil"))
 
 
 

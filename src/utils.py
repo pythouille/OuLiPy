@@ -293,3 +293,16 @@ def check_subanagram(s_sub: str, s_ref: str) -> bool:
     in s_ref.
     """
     return letter_counter(s_sub) <= letter_counter(s_ref)
+
+def check_pangram(s: str, alphabet=None) -> bool:
+    """
+    Return True if the text contains all letters of the
+    alphabet, at least once. False otherwise.
+
+    By default, it checks the 26 letters of latin alphabet.
+    """
+    if alphabet is None:
+        # By default, latin alphabet
+        alphabet = string.ascii_lowercase
+
+    return check_subanagram(alphabet, s)
