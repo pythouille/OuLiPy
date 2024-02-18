@@ -19,12 +19,12 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertEqual(remove_accent("À-côtés"), "A-cotes")
         self.assertEqual(remove_accent("Deçà delà"), "Deca dela")
 
-    def test_split_words(self):
-        self.assertEqual(split_words(""), [])
-        self.assertEqual(split_words("fenouil"), ["fenouil"])
-        self.assertEqual(split_words("Il était une fois,"), ["Il", "était", "une", "fois"])
+    def test_to_words(self):
+        self.assertEqual(to_words(""), [])
+        self.assertEqual(to_words("fenouil"), ["fenouil"])
+        self.assertEqual(to_words("Il était une fois,"), ["Il", "était", "une", "fois"])
         #NOTE: need for treating separate cases for "'" or "-"?
-        #self.assertEqual(split_words("Aujourd'hui, c'est lundi ! Eh."), ["Aujourd'hui", "c", "est", "lundi", "Eh"])
+        #self.assertEqual(to_words("Aujourd'hui, c'est lundi ! Eh."), ["Aujourd'hui", "c", "est", "lundi", "Eh"])
 
     def test_palindrom(self):
         self.assertTrue(check_palindrom(""))

@@ -94,7 +94,7 @@ def remove_accent(s: str) -> str:
             print(f"WARNING: unknown character: {c}")
     return s_copy
 
-def split_words(s: str) -> list[str]:
+def to_words(s: str) -> list[str]:
     """
     Return a list of the words in given text.
 
@@ -106,6 +106,12 @@ def split_words(s: str) -> list[str]:
         if w in s_copy:
             s_copy = s_copy.replace(w, ' ')
     return [w for w in s_copy.split(' ') if w]
+
+def to_lines(s: str) -> list[str]:
+    """
+    Return a list of lines in given text.
+    """
+    return s.split('\n')
 
 def char_counter(s: str) -> Counter:
     """
@@ -127,7 +133,7 @@ def word_counter(s: str) -> Counter:
     """
     Return a Counter of words of in the text.
     """
-    return Counter(split_words(s))
+    return Counter(to_words(s))
 
 
 ####
@@ -243,7 +249,7 @@ def check_tautogram(s: str, start_with=None) -> bool:
     begin with the same letter, False otherwise.
     """
     # Remove accent, uppercase, and get words only
-    words = split_words(remove_accent(s.lower()))
+    words = to_words(remove_accent(s.lower()))
     if start_with is None:
         if not s:
             return True
@@ -260,7 +266,7 @@ def check_abecedaire(s: str) -> bool:
     alphabet (an 'abécédaire'), False otherwise. 
     """
     # Remove accent, uppercase, and get words only
-    words = split_words(remove_accent(s.lower()))
+    words = to_words(remove_accent(s.lower()))
     if len(words) != 26:
         return False
     for c, w in zip(string.ascii_lowercase, words):
@@ -274,7 +280,7 @@ def check_kyrielle(s: str) -> bool:
     is the same letter as the first letter of the
     following word ('kyrielle').
     """
-    words = split_words(remove_accent(s.lower()))
+    words = to_words(remove_accent(s.lower()))
     for i in range(len(words)-1):
         if words[i][-1] != words[i+1][0]:
             return False
