@@ -54,11 +54,24 @@ class TestIsPalindrom(unittest.TestCase):
 
     def test_monovocalism(self):
         self.assertTrue(check_monovocalism(""))
-        self.assertTrue(check_monovocalism("Étre et n'être, tel est le Cerbère."))
-        self.assertTrue(check_monovocalism("Étre et n'être, tel est le Cerbère.", 'e'))
-        self.assertFalse(check_monovocalism("Étre et n'être, tel est le Cerbère.", 'a'))
+        self.assertTrue(check_monovocalism("Être et n'être, tel est le Cerbère.", 'e'))
+        self.assertTrue(check_monovocalism("Être et n'être, tel est le Cerbère.")) # Find E
+        self.assertFalse(check_monovocalism("Être et n'être, tel est le Cerbère.", 'a'))
         self.assertFalse(check_monovocalism("fenouil"))
         self.assertFalse(check_monovocalism("kayak"))
+
+    def test_turkish(self):
+        self.assertTrue(check_turkish(""))
+        self.assertTrue(check_turkish("kayak"))
+        self.assertTrue(check_turkish("Il était une noix..."))
+        self.assertFalse(check_turkish("fenouil")) # forbidden F
+        self.assertFalse(check_turkish("Il était une fois...")) # F 
+        self.assertFalse(check_turkish("Il était un pois...")) # P
+        self.assertFalse(check_turkish("Il était un mois...")) # M
+        self.assertFalse(check_turkish("Il était un bois...")) # B
+        self.assertFalse(check_turkish("Il était une voix...")) # V
+        # Silent letters: not handled in current version:
+        #self.assertTrue(check_turkish("compte")) # Silent M and P
 
     def test_prisoner(self):
         self.assertTrue(check_prisoner(""))

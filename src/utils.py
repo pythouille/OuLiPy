@@ -202,6 +202,23 @@ def check_monovocalism(s: str, voyel: str = None) -> bool:
     forbidden_voyels.remove(voyel)
     return check_lipogram(s, ''.join(forbidden_voyels))
 
+def check_turkish(s: str) -> bool:
+    """
+    Return True if the text can be read without moving the lips
+    ("vers turcs", i.e. approximatively lipogram in B, F, M, P, V).
+    Return False otherwise.
+
+    Note
+    ----
+    Currently, this function only checks the absence of B, F, M, P and V,
+    which is an approximation. In reality, the constraint is focused on
+    pronounciation. For example, the French word 'compte' has M and P
+    but they are not pronounced, so it should normally verify the
+    constraint. However, current implementation of the function would
+    return False.
+    """
+    return check_lipogram(s, forbidden="bfmpv")
+
 def check_prisoner(s: str, allow_accent=True) -> bool:
     """
     Return True if given text follow the 'prisoner's constraint',
