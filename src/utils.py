@@ -94,7 +94,7 @@ def remove_accent(s: str) -> str:
             print(f"WARNING: unknown character: {c}")
     return s_copy
 
-def to_words(s: str) -> list[str]:
+def to_words(s: str, letters_only=False) -> list[str]:
     """
     Return a list of the words in given text.
 
@@ -105,13 +105,23 @@ def to_words(s: str) -> list[str]:
     for w in string.whitespace:
         if w in s_copy:
             s_copy = s_copy.replace(w, ' ')
-    return [w for w in s_copy.split(' ') if w]
+    if letters_only:
+        s_copy = remove_accent(s_copy)
+    # Get words (ignore empty strings)
+    words = [w for w in s_copy.split(' ') if w]
+    return words
 
-def to_lines(s: str) -> list[str]:
+def to_lines(s: str, letters_only=False) -> list[str]:
     """
     Return a list of lines in given text.
     """
-    return s.split('\n')
+    # Get non-blank lines
+    lines = [line for line in s.split('\n') if line]
+    # Clean lines
+    if letters_only:
+        lines = [remove_accent(remove_non_word(line)) for line in lines]
+
+    return lines
 
 def char_counter(s: str) -> Counter:
     """
@@ -247,6 +257,14 @@ def check_tautogram(s: str, start_with=None) -> bool:
     """
     Return True if all the words in the text
     begin with the same letter, False otherwise.
+
+    Parameters
+    ----------
+    s : str
+        Text to check.
+    start_with : str, optional
+        Single character imposed at the beginning of each word.
+        Default value is the first letter of the text.
     """
     # Remove accent, uppercase, and get words only
     words = to_words(remove_accent(s.lower()))
@@ -254,8 +272,34 @@ def check_tautogram(s: str, start_with=None) -> bool:
         if not s:
             return True
         start_with = words[0][0]
+    elif len(start_with) != 1:
+        raise ValueError("'start_with' must be only one character.")
     for w in words:
         if w[0] != start_with:
+            return False
+    return True
+
+def check_acrostic(s: str, ref: str, by_words=False) -> bool:
+    """
+    Parameters
+    ----------
+    s : str
+        Text to check.
+    ref : str
+        Characters to be found at the beginning of each line or words.
+    by_words : bool, optional
+        If False, check the beginning of each line. If True,
+        check the beginning of each word. Defaults to False.
+    """
+    # Remove accent, uppercase, and get words only
+    if by_words:
+        units = to_words(s.lower(), letters_only=True)
+    else:
+        units = to_lines(s.lower(), letters_only=True)
+    if len(units) != len(ref):
+        return False
+    for u, c in zip(units, ref):
+        if u[0] != c:
             return False
     return True
 
@@ -265,14 +309,11 @@ def check_abecedaire(s: str) -> bool:
     begin with the successive letters in latin
     alphabet (an 'abécédaire'), False otherwise. 
     """
-    # Remove accent, uppercase, and get words only
-    words = to_words(remove_accent(s.lower()))
-    if len(words) != 26:
-        return False
-    for c, w in zip(string.ascii_lowercase, words):
-        if c != w[0]:
-            return False
-    return True
+    return check_acrostic(
+        s,
+        ref=string.ascii_lowercase,
+        by_words=True
+    )
 
 def check_kyrielle(s: str) -> bool:
     """

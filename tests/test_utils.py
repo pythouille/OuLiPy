@@ -93,6 +93,16 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_tautogram("Fenouil furibond faisant finement fi !", "a"))
         self.assertFalse(check_tautogram("Fenouil furibond faisant gras !")) # F != G
 
+    def test_acrostic(self):
+        self.assertTrue(check_acrostic("", ""))
+        self.assertTrue(check_acrostic("fenouil", "f"))
+        self.assertTrue(check_acrostic("fenouil", "f", by_words=True))
+        self.assertTrue(check_acrostic("Il était une fois...", "ieuf", by_words=True))
+        self.assertTrue(check_acrostic("Il \nétait \nune \nfois...", "ieuf"))
+        self.assertFalse(check_acrostic("Il était une fois...", "ieu", by_words=True))
+        self.assertFalse(check_acrostic("Il était une xxxx...", "ieuf", by_words=True))
+        self.assertFalse(check_acrostic("Il était une...", "ieuf", by_words=True))
+
     def test_abecedaire(self):
         self.assertTrue(check_abecedaire(
             "Axxx. Bxxx, cxéxxx dxx exxxx, fxxx gxxxxxx. "\
