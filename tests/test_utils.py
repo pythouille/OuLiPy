@@ -36,6 +36,14 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_palindrom("Xsope este ici et se repose."))
         self.assertFalse(check_palindrom("fenouil"))
 
+    def test_antipalindrom(self):
+        self.assertTrue(check_antipalindrom(""))
+        self.assertTrue(check_antipalindrom("fenouil")) # F!=L, E!=I, N!=U
+        self.assertFalse(check_antipalindrom("kayak")) # Palindrom
+        self.assertFalse(check_antipalindrom("blabla")) # L = L
+        self.assertFalse(check_antipalindrom("Êxxxe")) # E = E, with accents
+        self.assertFalse(check_antipalindrom("Hourrah !")) # H = H, with punctuation
+
     def test_lipogram(self):
         self.assertTrue(check_lipogram("", "e"))
         self.assertTrue(check_lipogram("kayak", "e"))

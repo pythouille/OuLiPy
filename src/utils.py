@@ -137,12 +137,32 @@ def word_counter(s: str) -> Counter:
 def check_palindrom(s: str) -> bool:
     """
     Return True if given text is a palindrom, False otherwise.
+    In a palindrom of size N, the i-th and (N-i)-th letters
+    are the same for every i.
+
+    Punctuation, spaces, accents and cases are ignored.
     """
     s_copy = s.lower()
     s_copy = remove_non_word(s_copy)
     s_copy = remove_accent(s_copy)
     for i in range(len(s_copy)//2):
         if s_copy[i] != s_copy[len(s_copy)-1-i]:
+            return False
+    return True
+
+def check_antipalindrom(s: str) -> bool:
+    """
+    Return True if given text is a anti-palindrom, False otherwise.
+    In a anti-palindrom of size N, the i-th and (N-i)-th letters
+    are always different.
+
+    Punctuation, spaces, accents and cases are ignored.
+    """
+    s_copy = s.lower()
+    s_copy = remove_non_word(s_copy)
+    s_copy = remove_accent(s_copy)
+    for i in range(len(s_copy)//2):
+        if s_copy[i] == s_copy[len(s_copy)-1-i]:
             return False
     return True
 
