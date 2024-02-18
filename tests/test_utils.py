@@ -117,6 +117,14 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(check_kyrielle("Touché. En naissant !")) # e-e n-n
         self.assertFalse(check_kyrielle("fenouil enragé")) # L != E
 
+    def test_anagram(self):
+        self.assertTrue(check_anagram("", "")) # Empty case
+        self.assertTrue(check_anagram("abcd", "dbca"))
+        self.assertTrue(check_anagram("Sourient:", "Routines !"))
+        self.assertTrue(check_anagram("eee", "Éeê"))
+        self.assertFalse(check_anagram("abc", "aabc")) # Missing letter
+        self.assertFalse(check_anagram("abc", "abd")) # Changing letter
+
 
 
 if __name__ == '__main__':

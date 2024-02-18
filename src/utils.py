@@ -279,3 +279,10 @@ def check_kyrielle(s: str) -> bool:
         if words[i][-1] != words[i+1][0]:
             return False
     return True
+
+def check_anagram(s1: str, s2: str) -> bool:
+    """
+    Return True if s1 and s2 use exactly the same
+    letters, the same amount of time; False otherwise.
+    """
+    return letter_counter(s1) == letter_counter(s2)
