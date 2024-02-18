@@ -75,25 +75,39 @@ class TestIsPalindrom(unittest.TestCase):
 
     def test_prisoner(self):
         self.assertTrue(check_prisoner(""))
+        self.assertTrue(check_prisoner("sans un son, sans un sou"))
+        self.assertTrue(check_prisoner("un réseau")) # 'é' allowed by default
         self.assertFalse(check_prisoner("fenouil"))
         self.assertFalse(check_prisoner("fenouil", allow_accent=False))
         self.assertFalse(check_prisoner("Xxxx.")) # uppercase
         self.assertFalse(check_prisoner("cinq")) # descender
         self.assertFalse(check_prisoner("j")) # descender
-        self.assertTrue(check_prisoner("un réseau")) # 'é' allowed by default
         self.assertFalse(check_prisoner("un réseau", allow_accent=False)) # 'é'
-        self.assertTrue(check_prisoner("sans un son, sans un sou"))
         self.assertFalse(check_prisoner("sans un son, sans un sou", allow_accent=False)) # ','
 
+    def test_tautogram(self):
+        self.assertTrue(check_tautogram(""))
+        self.assertTrue(check_tautogram("fenouil"))
+        self.assertTrue(check_tautogram("Fenouil furibond faisant finement fi !"))
+        self.assertTrue(check_tautogram("Fenouil furibond faisant finement fi !", "f"))
+        self.assertFalse(check_tautogram("Fenouil furibond faisant finement fi !", "a"))
+        self.assertFalse(check_tautogram("Fenouil furibond faisant gras !")) # F != G
+
     def test_abecedaire(self):
-        self.assertFalse(check_abecedaire("")) # Empty case
-        self.assertFalse(check_abecedaire("fenouil"))
         self.assertTrue(check_abecedaire(
             "Axxx. Bxxx, cxéxxx dxx exxxx, fxxx gxxxxxx. "\
             "Hxxxèx, ixxx jxxxx Kxx, lx Mx nxxxxxxxx... "\
             "Oxxxx pxxxxx ! Qxxx Rxxx sx txxxxxxx : "\
             "uxxx vxxxx wxxxxx xxxxxx y zxxxxxxxx."\
         ))
+        self.assertFalse(check_abecedaire("")) # Empty case
+        self.assertFalse(check_abecedaire("fenouil"))
+        self.assertFalse(check_abecedaire(
+            "Axxx. Bxxx, cxéxxx dxx exxxx, fxxx gxxxxxx. "\
+            "Hxxxèx, ixxx jxxxx Kxx, lx Mx nxxxxxxxx... "\
+            "Oxxxx qxxxxx ! Qxxx Rxxx sx txxxxxxx : "\
+            "uxxx vxxxx wxxxxx xxxxxx y zxxxxxxxx."\
+        )) # Q after O, instead of P
     
     def test_kyrielle(self):
         self.assertTrue(check_kyrielle("")) # Empty case

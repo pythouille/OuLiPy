@@ -237,6 +237,22 @@ def check_prisoner(s: str, allow_accent=True) -> bool:
             return False
     return True
 
+def check_tautogram(s: str, start_with=None) -> bool:
+    """
+    Return True if all the words in the text
+    begin with the same letter, False otherwise.
+    """
+    # Remove accent, uppercase, and get words only
+    words = split_words(remove_accent(s.lower()))
+    if start_with is None:
+        if not s:
+            return True
+        start_with = words[0][0]
+    for w in words:
+        if w[0] != start_with:
+            return False
+    return True
+
 def check_abecedaire(s: str) -> bool:
     """
     Return True if all 26 words in given text
