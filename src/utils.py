@@ -286,3 +286,10 @@ def check_anagram(s1: str, s2: str) -> bool:
     letters, the same amount of time; False otherwise.
     """
     return letter_counter(s1) == letter_counter(s2)
+
+def check_subanagram(s_sub: str, s_ref: str) -> bool:
+    """
+    Return True if all the letter in s_sub are contained
+    in s_ref.
+    """
+    return letter_counter(s_sub) <= letter_counter(s_ref)

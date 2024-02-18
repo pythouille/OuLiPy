@@ -125,6 +125,17 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_anagram("abc", "aabc")) # Missing letter
         self.assertFalse(check_anagram("abc", "abd")) # Changing letter
 
+    def test_anagram(self):
+        self.assertTrue(check_subanagram("", "")) # Empty case
+        self.assertTrue(check_subanagram("a", "abc"))
+        self.assertTrue(check_subanagram("abc", "aaabc"))
+        self.assertTrue(check_subanagram("abbccc", "aaabbbccc"))
+        self.assertTrue(check_subanagram("Sourient:", "Routines !")) # Anagram
+        self.assertTrue(check_subanagram("Routines !", "Sourient:")) # and vice-versa
+        self.assertTrue(check_subanagram("eee", "Éeêè")) # All letters included
+        self.assertFalse(check_subanagram("eeee", "Éeê")) # Not enough letters
+        self.assertFalse(check_subanagram("abc", "abd")) # Missing C in reference
+
 
 
 if __name__ == '__main__':
