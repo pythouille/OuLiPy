@@ -76,6 +76,11 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_monovocalism("fenouil"))
         self.assertFalse(check_monovocalism("kayak"))
 
+    def test_heteroconsonantism(self):
+        self.assertTrue(check_heteroconsonantism("Ab. Cdf; ghjkl emnpqrstvwxz !"))
+        self.assertFalse(check_heteroconsonantism(""))
+        self.assertFalse(check_heteroconsonantism("fenouil"))
+
     def test_turkish(self):
         self.assertTrue(check_turkish(""))
         self.assertTrue(check_turkish("kayak"))
@@ -100,18 +105,6 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_prisoner("j")) # descender
         self.assertFalse(check_prisoner("un réseau", allow_accent=False)) # 'é'
         self.assertFalse(check_prisoner("sans un son, sans un sou", allow_accent=False)) # ','
-
-    def test_monovocalism(self):
-        self.assertTrue(check_monovocalism(""))
-        self.assertTrue(check_monovocalism("Être hébété."))
-        self.assertTrue(check_monovocalism("Être hébété.", target='e'))
-        self.assertFalse(check_monovocalism("Être hébété.", target='a'))
-        self.assertFalse(check_monovocalism("fenouil"))
-
-    def test_heteroconsonantism(self):
-        self.assertTrue(check_heteroconsonantism("Ab. Cdf; ghjkl emnpqrstvwxz !"))
-        self.assertFalse(check_heteroconsonantism(""))
-        self.assertFalse(check_heteroconsonantism("fenouil"))
 
     def test_okapi(self):
         self.assertTrue(check_okapi(""))

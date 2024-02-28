@@ -286,26 +286,45 @@ def check_lipogram(s: str, forbidden: str) -> bool:
             return False
     return True
 
-def check_monovocalism(s: str, voyel: str = None) -> bool:
+def check_monovocalism(s: str, vowel=None) -> bool:
     """
-    Return True if the text use only one voyel (monovocalism),
+    Return True if there is only one vowel used in the text,
     False otherwise.
+
+    Parameters
+    ----------
+    s : str
+        Text to check.
+    vowel : str, optional
+        Single character, the only vowel that can be used in
+        the text. Defaults to None (any vowel can be used,
+        but only one for all the text).
     """
-    if voyel is None:
-        # Find first voyel of the text
-        s_copy = remove_accent(s.lower())
-        for c in s_copy:
-            if c in 'aeiouy':
-                voyel = c
-                break
-        if voyel is None:
-            # No voyel found
-            return True
-    elif voyel not in 'aeiouy':
-        raise ValueError("Please chose target voyel in 'aeiuoy'.")
-    forbidden_voyels = ['a', 'e', 'i', 'o', 'u', 'y']
-    forbidden_voyels.remove(voyel)
-    return check_lipogram(s, ''.join(forbidden_voyels))
+    s_vowels = set(to_vowels(s))
+    n_vowels = len(s_vowels)
+    if n_vowels > 1:
+        return False
+    if vowel:
+        if vowel not in 'aeiouy':
+            raise ValueError("Please chose target voyel in 'aeiuoy'.")
+        if vowel not in s_vowels:
+            return False
+    return True
+
+def check_heteroconsonantism(s: str) -> bool:
+    """
+    Return True if each consonant appears only once in
+    the source text, False otherwise.
+    """
+    s_consonants = set(to_consonants(s))
+    n_consonants = len(s_consonants)
+    if n_consonants != len(consonants_char):
+        # Missing or doubled consonants
+        return False
+    for c in consonants_char:
+        if c not in s_consonants:
+            return False
+    return True
 
 def check_turkish(s: str) -> bool:
     """
@@ -339,43 +358,6 @@ def check_prisoner(s: str, allow_accent=True) -> bool:
     # Check each character
     for c in s:
         if c in forbidden_char:
-            return False
-    return True
-
-def check_monovocalism(s: str, target=None) -> bool:
-    """
-    Return True if there is only one vowel used in the text,
-    False otherwise.
-
-    Parameters
-    ----------
-    s : str
-        Text to check.
-    target : str, optional
-        Single character imposed at the beginning of each word.
-        Defaults to None.
-    """
-    s_vowels = set(to_vowels(s))
-    n_vowels = len(s_vowels)
-    if n_vowels > 1:
-        return False
-    if target:
-        if target not in s_vowels:
-            return False
-    return True
-
-def check_heteroconsonantism(s: str) -> bool:
-    """
-    Return True if each consonant appears only once in
-    the source text, False otherwise.
-    """
-    s_consonants = set(to_consonants(s))
-    n_consonants = len(s_consonants)
-    if n_consonants != len(consonants_char):
-        # Missing or doubled consonants
-        return False
-    for c in consonants_char:
-        if c not in s_consonants:
             return False
     return True
 
