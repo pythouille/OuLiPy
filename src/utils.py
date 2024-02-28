@@ -294,6 +294,28 @@ def check_prisoner(s: str, allow_accent=True) -> bool:
             return False
     return True
 
+def check_monovocalism(s: str, target=None) -> bool:
+    """
+    Return True if there is only one vowel used in the text,
+    False otherwise.
+
+    Parameters
+    ----------
+    s : str
+        Text to check.
+    target : str, optional
+        Single character imposed at the beginning of each word.
+        Defaults to None.
+    """
+    s_vowels = set(to_vowels(s))
+    n_vowels = len(s_vowels)
+    if n_vowels > 1:
+        return False
+    if target:
+        if target not in s_vowels:
+            return False
+    return True
+
 def check_tautogram(s: str, start_with=None) -> bool:
     """
     Return True if all the words in the text
