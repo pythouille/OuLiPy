@@ -11,8 +11,8 @@ from typing import List
 # Global variables
 ####
 
-vowels = "aeiouy"
-consonants = "bcdfghjklmnpqrstvwxz"
+vowels_char = "aeiouy"
+consonants_char = "bcdfghjklmnpqrstvwxz"
 
 accent_to_letter = { # Non exhaustive list
     # Lower case
@@ -32,7 +32,8 @@ accent_to_letter = { # Non exhaustive list
               'Ÿ': 'Y', 'Ý': 'Y',           'Ñ': 'N',
     'Ç': 'C',
 }
-authorized_characters = ''.join(['æ', 'œ', 'Æ', 'Œ'])
+accents_char = ''.join(accent_to_letter.keys())
+ligatures_char = ''.join(['æ', 'œ', 'Æ', 'Œ'])
 
 low_ascender_char = ''.join([ # Accent outside the mean line
     'â', 'ä', 'á', 'à', 'ã',
@@ -86,13 +87,13 @@ def remove_accent(s: str) -> str:
     """
     s_copy = s
     for c in s_copy:
-        if c in accent_to_letter:
+        if c in accents_char:
             s_copy = s_copy.replace(c, accent_to_letter[c])
         elif c not in (
                 string.ascii_letters
                 + string.punctuation
                 + string.whitespace
-                + authorized_characters
+                + ligatures_char
                 ):
             print(f"WARNING: unknown character: {c}")
     return s_copy
@@ -160,7 +161,7 @@ def to_vowels(s: str) -> str:
 
     White space, punctuation and accents are discarded.
     """
-    return filter_letters(s, vowels)
+    return filter_letters(s, vowels_char)
 
 def to_consonants(s: str) -> str:
     """
@@ -169,7 +170,7 @@ def to_consonants(s: str) -> str:
 
     White space, punctuation and accents are discarded.
     """
-    return filter_letters(s, consonants)
+    return filter_letters(s, consonants_char)
 
 def letter_counter(s: str) -> Counter:
     """
