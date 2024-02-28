@@ -19,6 +19,17 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertEqual(remove_accent("À-côtés"), "A-cotes")
         self.assertEqual(remove_accent("Deçà delà"), "Deca dela")
 
+    def test_to_vowels(self):
+        self.assertEqual(to_vowels(""), "")
+        self.assertEqual(to_vowels("fenouil"), "eoui")
+        self.assertEqual(to_vowels("Oiseau"), "oieau")
+        self.assertEqual(to_vowels("Être hébété, oui."), "eeeeeoui")
+
+    def test_to_consonants(self):
+        self.assertEqual(to_consonants(""), "")
+        self.assertEqual(to_consonants("fenouil"), "fnl")
+        self.assertEqual(to_consonants("Un joli jalapeño."), "njljlpn")
+
     def test_to_words(self):
         self.assertEqual(to_words(""), [])
         self.assertEqual(to_words("fenouil"), ["fenouil"])

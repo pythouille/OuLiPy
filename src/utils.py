@@ -11,6 +11,9 @@ from typing import List
 # Global variables
 ####
 
+vowels = "aeiouy"
+consonants = "bcdfghjklmnpqrstvwxz"
+
 accent_to_letter = { # Non exhaustive list
     # Lower case
     'â': 'a', 'ä': 'a', 'á': 'a', 'à': 'a', 'ã': 'a',
@@ -39,13 +42,13 @@ low_ascender_char = ''.join([ # Accent outside the mean line
     'û', 'ü', 'ú', 'ù', 
     'ç', 'ñ',
 ])
-low_descender_char = ",;"
 ascender_char = (
     "bdfklt"
     + "'!\"&\'()*/?[\\]^`{|}'" # Punctuation
     + string.ascii_uppercase # Uppercase
     + low_ascender_char.upper() # Uppercase with accent
 )
+low_descender_char = ",;"
 descender_char = "gjpqy"
 
 
@@ -94,6 +97,18 @@ def remove_accent(s: str) -> str:
             print(f"WARNING: unknown character: {c}")
     return s_copy
 
+def to_lines(s: str, letters_only=False) -> list[str]:
+    """
+    Return a list of lines in given text.
+    """
+    # Get non-blank lines
+    lines = [line for line in s.split('\n') if line]
+    # Clean lines
+    if letters_only:
+        lines = [remove_accent(remove_non_word(line)) for line in lines]
+
+    return lines
+
 def to_words(s: str, letters_only=False) -> list[str]:
     """
     Return a list of the words in given text.
@@ -111,17 +126,45 @@ def to_words(s: str, letters_only=False) -> list[str]:
     words = [w for w in s_copy.split(' ') if w]
     return words
 
-def to_lines(s: str, letters_only=False) -> list[str]:
+def to_vowels(s: str) -> str:
     """
-    Return a list of lines in given text.
-    """
-    # Get non-blank lines
-    lines = [line for line in s.split('\n') if line]
-    # Clean lines
-    if letters_only:
-        lines = [remove_accent(remove_non_word(line)) for line in lines]
+    Return a string that contains only the vowels
+    in source text.
 
-    return lines
+    White space and punctuation are discarded.
+    Accents, are ignored.
+    """
+    # Clean data
+    s_copy = s.lower()
+    s_copy = remove_non_word(s_copy)
+    s_copy = remove_accent(s_copy)
+    # Get vowels only
+    s_vowels = []
+    for char in s_copy:
+        if char in vowels:
+            s_vowels.append(char)
+    
+    return ''.join(s_vowels)
+
+def to_consonants(s: str) -> str:
+    """
+    Return a string that contains only the vowels
+    in source text.
+
+    White space and punctuation are discarded.
+    Accents, are ignored.
+    """
+    # Clean data
+    s_copy = s.lower()
+    s_copy = remove_non_word(s_copy)
+    s_copy = remove_accent(s_copy)
+    # Get consonants only
+    s_consonants = []
+    for char in s_copy:
+        if char in consonants:
+            s_consonants.append(char)
+    
+    return ''.join(s_consonants)
 
 def char_counter(s: str) -> Counter:
     """
