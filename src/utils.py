@@ -423,6 +423,18 @@ def check_acrostic(s: str, ref: str, by_words=False) -> bool:
             return False
     return True
 
+def check_universal_acrostic(s: str) -> bool:
+    """
+    Return True if all 26 lines in given text
+    begin with the successive letters in latin
+    alphabet, False otherwise.
+    """
+    return check_acrostic(
+        s,
+        ref=string.ascii_lowercase,
+        by_words=False
+    )
+
 def check_abecedaire(s: str) -> bool:
     """
     Return True if all 26 words in given text

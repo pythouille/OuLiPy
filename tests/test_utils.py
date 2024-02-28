@@ -134,6 +134,20 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_acrostic("Il était une xxxx...", "ieuf", by_words=True))
         self.assertFalse(check_acrostic("Il était une...", "ieuf", by_words=True))
 
+    def test_universal_acrostic(self):
+        self.assertTrue(check_universal_acrostic(
+            "A\nb\nc\nd\ne\nf\ng\nh\ni\nj\n"\
+            "k\nl\nm\nn\no\np\nq\nr\ns\nt\n"\
+            "u\nv\nw\nx\ny\nz"
+        ))
+        self.assertFalse(check_universal_acrostic(""))
+        self.assertFalse(check_universal_acrostic("fenouil"))
+        self.assertFalse(check_universal_acrostic(
+            "A\nb\nc\nd\ne\nf\ng\nh\ni\nj\n"\
+            "k\nl\nm\nn\no\np\nq\nr\ns\nt\n"\
+            "X\nv\nw\nx\ny\nz"
+        )) # X instead of U
+
     def test_abecedaire(self):
         self.assertTrue(check_abecedaire(
             "Axxx. Bxxx, cxéxxx dxx exxxx, fxxx gxxxxxx. "\
