@@ -241,6 +241,21 @@ def check_antipalindrom(s: str) -> bool:
             return False
     return True
 
+def check_beaupresent(s: str, ref: str) -> bool:
+    """
+    Return True if given text uses only letters that are
+    also present in reference string, False otherwise.
+    """
+    # 
+    s_copy = remove_non_word(remove_accent(s.lower()))
+    ref_letters = remove_non_word(remove_accent(ref.lower()))
+
+    # Check constraint
+    for c in s_copy:
+        if c not in ref_letters:
+            return False
+    return True
+
 def check_lipogram(s: str, forbidden: str) -> bool:
     """
     Return True if given text ('s') does not contain

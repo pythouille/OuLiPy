@@ -55,6 +55,11 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_antipalindrom("Êxxxe")) # E = E, with accents
         self.assertFalse(check_antipalindrom("Hourrah !")) # H = H, with punctuation
 
+    def test_beaupresent(self):
+        self.assertTrue(check_beaupresent("", "Gilles Esposito-Farèse"))
+        self.assertTrue(check_beaupresent("Le positif était effaré.", "Gilles Esposito-Farèse"))
+        self.assertFalse(check_beaupresent("fenouil", "Gilles Esposito-Farèse"))
+
     def test_lipogram(self):
         self.assertTrue(check_lipogram("", "e"))
         self.assertTrue(check_lipogram("kayak", "e"))
