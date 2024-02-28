@@ -57,7 +57,7 @@ descender_char = "gjpqy"
 # Utils
 ####
 
-def remove_punctuation(s: str) -> str:
+def remove_punctuation(s: str, replace_char='') -> str:
     """
     Return a copy of given string without
     its punctuation.
@@ -65,7 +65,7 @@ def remove_punctuation(s: str) -> str:
     s_copy = s
     for c in string.punctuation:
         if c in s_copy:
-            s_copy = s_copy.replace(c, '')
+            s_copy = s_copy.replace(c, replace_char)
     return s_copy
 
 def remove_non_word(s: str) -> str:
@@ -75,7 +75,12 @@ def remove_non_word(s: str) -> str:
     are non-word character).
     """
     s_copy = s
-    for c in (string.punctuation + string.whitespace):
+    for c in string.punctuation:
+        if c in s_copy:
+            # (whitespace to ensure separation)
+            s_copy = s_copy.replace(c, ' ')
+    for c in string.whitespace:
+        # Replace all whitespace, and erased punctuation
         if c in s_copy:
             s_copy = s_copy.replace(c, '')
     return s_copy
@@ -117,7 +122,7 @@ def to_words(s: str, letters_only=False) -> list[str]:
     White space and punctuation are discarded.
     """
     # Remove punctuation and standardize white space
-    s_copy = remove_punctuation(s)
+    s_copy = remove_punctuation(s, replace_char=' ')
     for w in string.whitespace:
         if w in s_copy:
             s_copy = s_copy.replace(w, ' ')
@@ -488,6 +493,87 @@ def check_snob(s: str) -> bool:
         if count_common(words[i], words[i+1]) != 0:
             return False
     return True
+
+def check_ngram(s: str, n=None) -> bool:
+    """
+    Return True if each word in given text has the same number
+    of letters, or if this number matches given value(s).
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    n : int or list of int, optional
+        Required length(s) for each word of given text.
+        By default, only check that all the words have
+        the same length.
+    """
+    # Extract word lengths
+    words_lengths = [len(word) for word in to_words(s)]
+    if not words_lengths:
+        return True
+    words_lengths.sort()
+
+    if n is None:
+        # Default case:
+        # All the word must have the same length
+        return len(set(words_lengths)) <= 1
+    elif isinstance(n, int):
+        if len(set(words_lengths)) > 1:
+            # More than one possible length
+            return False
+        return words_lengths[0] == n
+    elif isinstance(n, list):
+        # Check that extracted lengths are authorized
+        for l in words_lengths:
+            if l not in n:
+                # Forbidden value
+                return False
+        return True
+    else:
+        raise ValueError("'n' argument must be an integer, or a list of integer.")
+
+def check_maxgram(s: str, m: int):
+    """
+    Return True if each word in given text is 'm' letters
+    long or smaller.
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    m : int
+        If given, each word must have 'max' letters or less.
+    """
+    # Extract words length
+    words_lengths = [len(word) for word in to_words(s)]
+    if not words_lengths:
+        return True
+    words_lengths.sort()
+
+    # Compare to highest value
+    return words_lengths[-1] <= m
+
+def check_mingram(s: str, m: int):
+    """
+    Return True if each word in given text is at least
+    'm' letters long.
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    m : int
+        If given, each word must have 'm' letters or more.
+    """
+    # Extract words length
+    words_lengths = [len(word) for word in to_words(s)]
+    if not words_lengths:
+        return True
+    words_lengths.sort()
+
+    # Compare to smallest value
+    return words_lengths[0] >= m
 
 def check_anagram(s1: str, s2: str) -> bool:
     """

@@ -186,6 +186,32 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(check_snob("Ça ! Quel gras fenouil !"))
         self.assertFalse(check_snob("Un fenouil cuit"))
 
+    def test_ngram(self):
+        self.assertTrue(check_ngram("", 7))
+        self.assertTrue(check_ngram("fenouil", 7))
+        self.assertTrue(check_ngram("Halte au fenouil !", [2, 5, 7]))
+        self.assertTrue(check_ngram("Ab bc cd, de, fg."))
+        self.assertTrue(check_ngram("Ab bc cd, de, fg.", 2))
+        self.assertFalse(check_ngram("Ab bc cd, de, fg.", 3))
+        self.assertFalse(check_ngram("Ab bc cd, de, fgh.", 2))
+        self.assertFalse(check_ngram("Halte au fenouil !", [5, 7]))
+
+    def test_maxgram(self):
+        self.assertTrue(check_maxgram("", 1))
+        self.assertTrue(check_maxgram("fenouil", 8))
+        self.assertTrue(check_maxgram("fenouil", 7))
+        self.assertTrue(check_maxgram("Il y a un pb d'as.", 2))
+        self.assertFalse(check_maxgram("Il y a un pb d'as.", 1))
+        self.assertFalse(check_maxgram("fenouil", 6))
+
+    def test_mingram(self):
+        self.assertTrue(check_mingram("", 1))
+        self.assertTrue(check_mingram("fenouil", 6))
+        self.assertTrue(check_mingram("fenouil", 7))
+        self.assertTrue(check_mingram("Quand trois gamins disent bonjour...", 5))
+        self.assertFalse(check_mingram("Quand trois gamins disent bonjour...", 6))
+        self.assertFalse(check_mingram("fenouil", 8))
+
     def test_anagram(self):
         self.assertTrue(check_anagram("", "")) # Empty case
         self.assertTrue(check_anagram("abcd", "dbca"))
