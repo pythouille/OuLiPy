@@ -171,14 +171,6 @@ def to_consonants(s: str) -> str:
     """
     return filter_letters(s, consonants)
 
-def char_counter(s: str) -> Counter:
-    """
-    Return a Counter of characters in the text,
-    including different versions of letters (with
-    accent for example), punctuation, and spaces.
-    """
-    return Counter(s)
-
 def letter_counter(s: str) -> Counter:
     """
     Return a Counter of letters in the text.
