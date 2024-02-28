@@ -96,6 +96,13 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_prisoner("un réseau", allow_accent=False)) # 'é'
         self.assertFalse(check_prisoner("sans un son, sans un sou", allow_accent=False)) # ','
 
+    def test_monovocalism(self):
+        self.assertTrue(check_monovocalism(""))
+        self.assertTrue(check_monovocalism("Être hébété."))
+        self.assertTrue(check_monovocalism("Être hébété.", target='e'))
+        self.assertFalse(check_monovocalism("Être hébété.", target='a'))
+        self.assertFalse(check_monovocalism("fenouil"))
+
     def test_tautogram(self):
         self.assertTrue(check_tautogram(""))
         self.assertTrue(check_tautogram("fenouil"))
