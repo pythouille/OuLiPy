@@ -331,6 +331,35 @@ def check_heteroconsonantism(s: str) -> bool:
             return False
     return True
 
+def check_okapi(s: str) -> bool:
+    """
+    Return True if source has is an alternation
+    of vowels and consonants, False otherwise.
+    """
+    if not s:
+        return True
+    # Extract letters only
+    s_copy = s.lower()
+    s_copy = remove_non_word(s_copy)
+    s_copy = remove_accent(s_copy)
+    # Check alternation
+    previous_is_vowel = s[0] in vowels_char
+    for c in s_copy[1:]:
+        if c in vowels_char:
+            if previous_is_vowel:
+                # Double vowel detected
+                return False
+            previous_is_vowel = True
+        elif c in consonants_char:
+            if not previous_is_vowel:
+                # Double consonant detected
+                return False
+            previous_is_vowel = False
+        else:
+            raise RuntimeError(f"Unknown vowel or consonant: {c}")
+
+    return True
+
 def check_tautogram(s: str, start_with=None) -> bool:
     """
     Return True if all the words in the text

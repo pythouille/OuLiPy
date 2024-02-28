@@ -108,6 +108,14 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_heteroconsonantism(""))
         self.assertFalse(check_heteroconsonantism("fenouil"))
 
+    def test_okapi(self):
+        self.assertTrue(check_okapi(""))
+        self.assertTrue(check_okapi("E"))
+        self.assertTrue(check_okapi("okapi"))
+        self.assertTrue(check_okapi("Je me dis à mi-mot..."))
+        self.assertFalse(check_okapi("fenouil"))
+        self.assertFalse(check_okapi("Patatra !"))
+
     def test_tautogram(self):
         self.assertTrue(check_tautogram(""))
         self.assertTrue(check_tautogram("fenouil"))
