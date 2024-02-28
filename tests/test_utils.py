@@ -4,7 +4,7 @@ from src.utils import *
 
 
 
-class TestIsPalindrom(unittest.TestCase):
+class TestConstraintChecker(unittest.TestCase):
     def test_remove_non_word(self):
         self.assertEqual(remove_non_word(""), "")
         self.assertEqual(remove_non_word("fenouil"), "fenouil")
@@ -296,6 +296,7 @@ class TestIsPalindrom(unittest.TestCase):
         ))
         self.assertFalse(check_asupposer(""))
         self.assertFalse(check_asupposer("fenouil"))
+
 
 
 if __name__ == '__main__':
