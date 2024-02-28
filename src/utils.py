@@ -191,6 +191,21 @@ def word_counter(s: str) -> Counter:
     """
     return Counter(to_words(s))
 
+def chunk(s: str, n: int) -> list[str]:
+    """
+    Return a list of string of size n, extracted
+    from successive letters in given string 's'.
+    """
+    s_copy = remove_non_word(remove_accent(s.lower()))
+
+    chunk_list = []
+    char_pointer = 0
+    while char_pointer < len(s_copy):
+        chunk_list.append(s_copy[char_pointer:char_pointer+n])
+        char_pointer += n
+
+    return chunk_list
+
 def count_common(s1: str, s2: str) -> int:
     """
     Return the number of letters that are
@@ -603,6 +618,28 @@ def check_subanagram(s_sub: str, s_ref: str) -> bool:
     in s_ref.
     """
     return letter_counter(s_sub) <= letter_counter(s_ref)
+
+def check_ulcerations(s: str, ref: str = 'ULCERATIONS') -> bool:
+    """
+    Return True if given text is built by successive anagrams
+    of given reference text.
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    ref : str, optional
+        Reference word, or letters, to follow.
+        Defaults to 'ULCERATIONS', or the 11 most used
+        letters in French.
+    """
+    ref_letters = remove_non_word(remove_accent(ref.lower()))
+
+    chunks = chunk(s, len(ref_letters))
+    for c in chunks:
+        if not check_anagram(c, ref_letters):
+            return False
+    return True
 
 def check_pangram(s: str, alphabet=None) -> bool:
     """
