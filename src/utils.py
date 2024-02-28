@@ -663,3 +663,20 @@ def check_panscrabblogram(s: str, lang='fr') -> bool:
         raise ValueError(f"'lang' argument must be in {set(available_lang.keys())}")
 
     return check_anagram(available_lang[lang], s)
+
+def check_asupposer(s: str) -> bool:
+    """
+    Return True if the text is made of one long sentence,
+    False otherwise. In other wordes, this function checks
+    that there is no terminal punctuation (./!/?) and that
+    there are more than 1000 characters.
+    """
+    size = len(s)
+    # Consider '...' as authorized punctuation
+    s_copy = s.replace('...', '')
+    # Look for sentence endings
+    for p in ['.', '!', '?']:
+        if p in s_copy[:-1]:
+            return False
+    # Check minimal length
+    return size >= 1000

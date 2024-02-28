@@ -254,6 +254,48 @@ class TestIsPalindrom(unittest.TestCase):
         with self.assertRaises(ValueError):
             check_panscrabblogram("fenouil", lang='es')
 
+    def test_asupposer(self):
+        self.assertTrue(check_asupposer(
+            "À supposer qu'on me demande ici de rédiger un à-supposer qui "\
+            "soit à la fois une illustration plausible de ce qu'est un "\
+            "à-supposer, mais qui soit aussi rigoureusement exact, "\
+            "c'est-à-dire que le texte du présent test ne s'arrêtera que "\
+            "lorsqu'il sera suffisamment long, non pas d'ailleurs pour le "\
+            "simple plaisir de faire un texte long mais plutôt pour en faire "\
+            "un sérieux, ceci n'empêchant pas de le faire avec plaisir, car "\
+            "le sérieux dont on parle est le terme employé par Jacques Jouet,"\
+            "inventeur de la contrainte, ladite contrainte qu'on retrouve à "\
+            "sa bonne place expliquée sur le site de l'Oulipo, et toujours "\
+            "habilement complété par l'excellent site de Zazipo également - "\
+            "ou Zazie Mode d'Emploi peut-on dire également - qui ne manque "\
+            "pas de rappeler le lien vers le premier site que nous évoquions, "\
+            "et qui évoque, lui, sérieux d'un à-supposer comme dépendant d'un "\
+            "nombre minimal de caractères, arbitrairement choisi ou peut-être "\
+            "l'est-il pour des raisons plus métaphysiques dont j'ignorerais "\
+            "la teneur... un minimum fixé à 1000."
+        ))
+        self.assertFalse(check_asupposer(
+            "À supposer qu'on me demande ici de rédiger un à-supposer qui "\
+            "soit à la fois une illustration plausible de ce qu'est un "\
+            "à-supposer, MAIS QUI TERMINE UNE PHRASE EN PLEIN MILIEU ! "\
+            "HÉLAS... alors que je préférerais promettre que "\
+            "le texte du présent test ne s'arrêtera que "\
+            "lorsqu'il sera suffisamment long, non pas d'ailleurs pour le "\
+            "simple plaisir de faire un texte long mais plutôt pour en faire "\
+            "un sérieux, ceci n'empêchant pas de le faire avec plaisir, car "\
+            "le sérieux dont on parle est le terme employé par Jacques Jouet,"\
+            "inventeur de la contrainte, ladite contrainte qu'on retrouve à "\
+            "sa bonne place expliquée sur le site de l'Oulipo, et toujours "\
+            "habilement complété par l'excellent site de Zazipo également - "\
+            "ou Zazie Mode d'Emploi peut-on dire également - qui ne manque "\
+            "pas de rappeler le lien vers le premier site que nous évoquions, "\
+            "et qui évoque, lui, sérieux d'un à-supposer comme dépendant d'un "\
+            "nombre minimal de caractères, arbitrairement choisi ou peut-être "\
+            "l'est-il pour des raisons plus métaphysiques dont j'ignorerais "\
+            "la teneur... un minimum fixé à 1000."
+        ))
+        self.assertFalse(check_asupposer(""))
+        self.assertFalse(check_asupposer("fenouil"))
 
 
 if __name__ == '__main__':
