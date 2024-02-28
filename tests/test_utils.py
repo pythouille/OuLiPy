@@ -103,6 +103,11 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_monovocalism("Être hébété.", target='a'))
         self.assertFalse(check_monovocalism("fenouil"))
 
+    def test_heteroconsonantism(self):
+        self.assertTrue(check_heteroconsonantism("Ab. Cdf; ghjkl emnpqrstvwxz !"))
+        self.assertFalse(check_heteroconsonantism(""))
+        self.assertFalse(check_heteroconsonantism("fenouil"))
+
     def test_tautogram(self):
         self.assertTrue(check_tautogram(""))
         self.assertTrue(check_tautogram("fenouil"))

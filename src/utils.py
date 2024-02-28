@@ -316,6 +316,21 @@ def check_monovocalism(s: str, target=None) -> bool:
             return False
     return True
 
+def check_heteroconsonantism(s: str) -> bool:
+    """
+    Return True if each consonant appears only once in
+    the source text, False otherwise.
+    """
+    s_consonants = set(to_consonants(s))
+    n_consonants = len(s_consonants)
+    if n_consonants != len(consonants_char):
+        # Missing or doubled consonants
+        return False
+    for c in consonants_char:
+        if c not in s_consonants:
+            return False
+    return True
+
 def check_tautogram(s: str, start_with=None) -> bool:
     """
     Return True if all the words in the text
