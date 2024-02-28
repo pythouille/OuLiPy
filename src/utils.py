@@ -186,6 +186,19 @@ def word_counter(s: str) -> Counter:
     """
     return Counter(to_words(s))
 
+def count_common(s1: str, s2: str) -> int:
+    """
+    Return the number of letters that are
+    present in both words.
+    """
+    s1_letters = remove_accent(s1.lower())
+    s2_letters = remove_accent(s2.lower())
+    count = 0
+    for c in s1_letters:
+        if c in s2_letters:
+            count += 1
+    return count
+
 
 ####
 # Constraint checker
@@ -431,6 +444,36 @@ def check_kyrielle(s: str) -> bool:
     words = to_words(remove_accent(s.lower()))
     for i in range(len(words)-1):
         if words[i][-1] != words[i+1][0]:
+            return False
+    return True
+
+def check_sympathetic(s: str, min=1) -> bool:
+    """
+    Return True if all successive words in given text
+    share at least one (or more) letters, False otherwise.
+
+    Parameters
+    ----------
+    s : str
+        Text to check.
+    min : int, optional
+        Minimal required number of common letters
+        between each successive words. Defaults to 1. 
+    """
+    words = to_words(s)
+    for i in range(len(words)-1):
+        if count_common(words[i], words[i+1]) < min:
+            return False
+    return True
+
+def check_snob(s: str) -> bool:
+    """
+    Return True if all successive words in given text
+    share no common letter, False otherwise.
+    """
+    words = to_words(s)
+    for i in range(len(words)-1):
+        if count_common(words[i], words[i+1]) != 0:
             return False
     return True
 

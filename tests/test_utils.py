@@ -158,6 +158,20 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertTrue(check_kyrielle("Touché. En naissant !")) # e-e n-n
         self.assertFalse(check_kyrielle("fenouil enragé")) # L != E
 
+    def test_sympathetic(self):
+        self.assertTrue(check_sympathetic(""))
+        self.assertTrue(check_sympathetic("fenouil"))
+        self.assertTrue(check_sympathetic("Un fenouil cuit")) # nu, ui
+        self.assertTrue(check_sympathetic("Un fenouil cuit", min=2)) # nu, ui
+        self.assertFalse(check_sympathetic("Un fenouil cuit", min=3)) # nu, ui
+        self.assertFalse(check_sympathetic("Fenouil, ahah !"))
+    
+    def test_snob(self):
+        self.assertTrue(check_snob(""))
+        self.assertTrue(check_snob("fenouil"))
+        self.assertTrue(check_snob("Ça ! Quel gras fenouil !"))
+        self.assertFalse(check_snob("Un fenouil cuit"))
+
     def test_anagram(self):
         self.assertTrue(check_anagram("", "")) # Empty case
         self.assertTrue(check_anagram("abcd", "dbca"))
