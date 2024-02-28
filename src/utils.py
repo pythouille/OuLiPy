@@ -126,45 +126,50 @@ def to_words(s: str, letters_only=False) -> list[str]:
     words = [w for w in s_copy.split(' ') if w]
     return words
 
+def filter_letters(s: str, filter: str) -> str:
+    """
+    Return a string that contains only the letters
+    in source text.
+
+    White space, punctuation and accents are discarded.
+
+    Parameters
+    ----------
+    s : str
+        Target text.
+    filter : str
+        All the letters that are preserved in output string.
+        Other letters are removed.
+    """
+    # Clean data
+    s_copy = s.lower()
+    s_copy = remove_non_word(s_copy)
+    s_copy = remove_accent(s_copy)
+    # Get target letters only
+    s_filtered = []
+    for char in s_copy:
+        if char in filter:
+            s_filtered.append(char)
+
+    return ''.join(s_filtered)
+
 def to_vowels(s: str) -> str:
     """
     Return a string that contains only the vowels
     in source text.
 
-    White space and punctuation are discarded.
-    Accents, are ignored.
+    White space, punctuation and accents are discarded.
     """
-    # Clean data
-    s_copy = s.lower()
-    s_copy = remove_non_word(s_copy)
-    s_copy = remove_accent(s_copy)
-    # Get vowels only
-    s_vowels = []
-    for char in s_copy:
-        if char in vowels:
-            s_vowels.append(char)
-    
-    return ''.join(s_vowels)
+    return filter_letters(s, vowels)
 
 def to_consonants(s: str) -> str:
     """
-    Return a string that contains only the vowels
+    Return a string that contains only the consonants
     in source text.
 
-    White space and punctuation are discarded.
-    Accents, are ignored.
+    White space, punctuation and accents are discarded.
     """
-    # Clean data
-    s_copy = s.lower()
-    s_copy = remove_non_word(s_copy)
-    s_copy = remove_accent(s_copy)
-    # Get consonants only
-    s_consonants = []
-    for char in s_copy:
-        if char in consonants:
-            s_consonants.append(char)
-    
-    return ''.join(s_consonants)
+    return filter_letters(s, consonants)
 
 def char_counter(s: str) -> Counter:
     """
