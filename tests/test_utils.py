@@ -152,6 +152,16 @@ class TestIsPalindrom(unittest.TestCase):
         self.assertFalse(check_pangram(""))
         self.assertFalse(check_pangram("fenouil"))
 
+    def test_panscrabblogram(self):
+        self.assertTrue(check_panscrabblogram("YRLKFBUEEDSOOHOIEAEARUEIESUEECNOALEALIRTEFWENDAVTMEUMIQRANRIRTBTUHLECNNPAMPDJTOSEVAGXIZIENSTGUISLOAS", lang='fr'))
+        self.assertTrue(check_panscrabblogram("YEHFEOQGDDAARLKIVTEEENFYTADTIOSIVUIRWLUGOSIMWCIPSOOLOETBNCEOIEUDAPNXGOAAERRTIZIASNRTRHLJMEEBUEAANN", lang='en'))
+        self.assertFalse(check_panscrabblogram("YEHFEOQGDDAARLKIVTEEENFYTADTIOSIVUIRWLUGOSIMWCIPSOOLOETBNCEOIEUDAPNXGOAAERRTIZIASNRTRHLJMEEBUEAANN", lang='fr'))
+        self.assertFalse(check_panscrabblogram(""))
+        self.assertFalse(check_panscrabblogram("fenouil"))
+        # Check Error for unknown language
+        with self.assertRaises(ValueError):
+            check_panscrabblogram("fenouil", lang='es')
+
 
 
 if __name__ == '__main__':

@@ -347,9 +347,37 @@ def check_pangram(s: str, alphabet=None) -> bool:
     alphabet, at least once. False otherwise.
 
     By default, it checks the 26 letters of latin alphabet.
+
+    Parameters
+    ----------
+    alphabet : str, optional
+        Check a given alphabet. Defaults to None.
     """
     if alphabet is None:
         # By default, latin alphabet
         alphabet = string.ascii_lowercase
 
     return check_subanagram(alphabet, s)
+
+def check_panscrabblogram(s: str, lang='fr') -> bool:
+    """
+    Return True if the text is made of (and only of)
+    all the letters in a box of Scrabble.
+
+    Parameters
+    ----------
+    lang: str in {'fr', 'en'}
+        Language of reference. Available languages
+        are French ('fr') and English ('en').
+        Defaults to French.
+    """
+    available_lang = {
+        # French
+        'fr': "aaaaaaaaabbccdddeeeeeeeeeeeeeeeffgghhiiiiiiiijklllllmmmnnnnnnooooooppqrrrrrrssssssttttttuuuuuuvvwxyz",
+        # English
+        'en': "aaaaaaaaabbccddddeeeeeeeeeeeeffggghhiiiiiiiiijkllllmmnnnnnnooooooooppqrrrrrrssssttttttuuuuvvwwxyyz"
+    }
+    if lang not in available_lang:
+        raise ValueError(f"'lang' argument must be in {set(available_lang.keys())}")
+
+    return check_anagram(available_lang[lang], s)
