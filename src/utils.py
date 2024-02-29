@@ -712,6 +712,28 @@ def check_heterogram(s: str, ref: str = 'ULCERATIONS') -> bool:
             return False
     return True
 
+def check_ulcerations(s: str, tone='c'):
+    """
+    Return True if given text is an heterogram
+    based on 'Ulcerations', with possibly a
+    specific letter instead of 'c'.
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    tone : str, optional
+        Reference letter to be added to the 10 most
+        common letters in French. Defaults to 'c'
+        ("Ul(c)érations sur ton de C").
+
+    Notes
+    -----
+    - https://www.zazipo.net/+-Heterogramme-+
+    - https://www.zazipo.net/+-Ulcerations-+
+    """
+    return check_heterogram(s, ref="UL_ERATIONS"+tone)
+
 def check_pangram(s: str, alphabet=None) -> bool:
     """
     Return True if the text contains all letters of the

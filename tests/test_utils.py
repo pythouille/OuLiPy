@@ -238,6 +238,17 @@ class TestConstraintChecker(unittest.TestCase):
         self.assertFalse(check_heterogram("lcerations", "ULCERATIONS"))
         self.assertFalse(check_heterogram("ulcerations, et...", "ULCERATIONS"))
 
+    def test_ulcerations(self):
+        self.assertTrue(check_ulcerations("")) # Empty case
+        self.assertTrue(check_ulcerations("ulcerations"))
+        self.assertTrue(check_ulcerations("Taclé, ou rins"))
+        self.assertTrue(check_ulcerations("Taclé, ou rinsul cé ra tison."))
+        self.assertTrue(check_ulcerations("ulcerations", tone='c'))
+        self.assertFalse(check_ulcerations("fenouil", tone='f'))
+        self.assertFalse(check_ulcerations("fenouil"))
+        self.assertFalse(check_ulcerations("lcerations"))
+        self.assertFalse(check_ulcerations("ulcerations, et..."))
+
     def test_pangram(self):
         self.assertTrue(check_pangram("Portez ce whisky au vieux juge blond qui fume."))
         self.assertFalse(check_pangram("Portez ce whisky au vieux juge blond qui gambade."))
