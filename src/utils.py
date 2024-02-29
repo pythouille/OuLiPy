@@ -339,22 +339,21 @@ def check_monovocalism(s: str, vowel=None) -> bool:
 
 def check_heteroconsonantism(s: str) -> bool:
     """
-    Return True if each consonant appears only once in
-    the source text, False otherwise.
+    Return True if all consonants of source text are
+    different, False otherwise.
 
     Notes
     -----
     See also: https://zazipo.net/+-Heteroconsonnantisme-+
     """
-    s_consonants = set(to_consonants(s))
+    if not s:
+        return True
+    s_consonants = to_consonants(s)
+    # All consonants
     n_consonants = len(s_consonants)
-    if n_consonants != len(consonants_char):
-        # Missing or doubled consonants
-        return False
-    for c in consonants_char:
-        if c not in s_consonants:
-            return False
-    return True
+    # All distinct consonants
+    n_different_consonants = len(set(s_consonants))
+    return n_consonants == n_different_consonants
 
 def check_turkish(s: str) -> bool:
     """
@@ -515,7 +514,6 @@ def check_acrostic(s: str, ref: str, by_words=False, check_length=True) -> bool:
     else:
         units = to_lines(s.lower(), letters_only=True)
     if check_length and (len(units) != len(ref)):
-        print(ref, "Wrong length")
         return False
     for i, u in enumerate(units):
         if u[0] != ref[i%len(ref)]:

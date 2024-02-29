@@ -77,9 +77,12 @@ class TestConstraintChecker(unittest.TestCase):
         self.assertFalse(check_monovocalism("kayak"))
 
     def test_heteroconsonantism(self):
+        self.assertTrue(check_heteroconsonantism(""))
+        self.assertTrue(check_heteroconsonantism("fenouil"))
+        self.assertTrue(check_heteroconsonantism("Je veux ça, et me rends là."))
         self.assertTrue(check_heteroconsonantism("Ab. Cdf; ghjkl emnpqrstvwxz !"))
-        self.assertFalse(check_heteroconsonantism(""))
-        self.assertFalse(check_heteroconsonantism("fenouil"))
+        self.assertFalse(check_heteroconsonantism("kayak"))
+        self.assertFalse(check_heteroconsonantism("Il était une fois..."))
 
     def test_turkish(self):
         self.assertTrue(check_turkish(""))
