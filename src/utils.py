@@ -893,3 +893,145 @@ def check_asupposer(s: str) -> bool:
             return False
     # Check minimal length
     return size >= 1000
+
+
+####
+# Operations, statistics
+####
+
+gematria_dict = { # From http://www.gef.free.fr/gem.php
+    # Latin par rang
+    'latin_rank': {
+        'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
+        'G': 7, 'H': 8, 'I': 9, 'J': 9, 'K': 10, 'L': 11, 'M': 12,
+        'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18,
+        'T': 19, 'U': 20, 'V': 20, 'X': 21, 'Y': 22, 'Z': 23
+    },
+    # Latin classique
+    'latin_classic': {
+        'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
+        'G': 7, 'H': 8, 'I': 9, 'J': 9, 'K': 10, 'L': 20, 'M': 30,
+        'N': 40, 'O': 50, 'P': 60, 'Q': 70, 'R': 80, 'S': 90,
+        'T': 100, 'U': 200, 'V': 200, 'X': 300, 'Y': 400, 'Z': 500
+    },
+    # Latin carré
+    'latin_square': {
+        'A': 1, 'B': 4, 'C': 9, 'D': 16, 'E': 25, 'F': 36,
+        'G': 49, 'H': 64, 'I': 81, 'J': 81, 'K': 100, 'L': 400, 'M': 900,
+        'N': 1600, 'O': 2500, 'P': 3600, 'Q': 4900, 'R': 6400, 'S': 8400,
+        'T': 10000, 'U': 40000, 'V': 40000, 'X': 90000, 'Y': 160000, 'Z': 250000
+    },
+    # Français par rang
+    'french_rank': {
+        'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
+        'G': 7, 'H': 8, 'I': 9, 'J': 10, 'K': 11, 'L': 12, 'M': 13,
+        'N': 14, 'O': 15, 'P': 16, 'Q': 17, 'R': 18, 'S': 19,
+        'T': 20, 'U': 21, 'V': 22, 'W': 23, 'X': 24, 'Y': 25, 'Z': 26
+    },
+    # Français classique
+    'french_classic': {
+        'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
+        'G': 7, 'H': 8, 'I': 9, 'J': 10, 'K': 20, 'L': 30, 'M': 40,
+        'N': 50, 'O': 60, 'P': 70, 'Q': 80, 'R': 90, 'S': 100,
+        'T': 200, 'U': 300, 'V': 400, 'W': 500, 'X': 600, 'Y': 700, 'Z': 800
+    },
+    # Français moins classique
+    'french_classic': {
+        'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
+        'G': 7, 'H': 8, 'I': 9, 'K': 10, 'L': 20, 'M': 30,
+        'N': 40, 'O': 50, 'P': 60, 'Q': 70, 'R': 80, 'S': 90,
+        'T': 100, 'U': 110, 'V': 120, 'W': 130, 'X': 140, 'Y': 150, 'Z': 160
+    },
+    # Jacob-Abraham Soubira
+    'jacob_abraham_soubira': {
+        'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
+        'G': 7, 'H': 8, 'I': 9, 'K': 10, 'L': 20, 'M': 30,
+        'N': 40, 'O': 50, 'P': 60, 'Q': 70, 'R': 80, 'S': 90,
+        'T': 100, 'U': 110, 'V': 120, 'W': 240, 'X': 130, 'Y': 140, 'Z': 150
+    },
+    # Code de Cheiro
+    'cheiro_code': {
+        'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 8,
+        'G': 3, 'H': 5, 'I': 1, 'J': 1, 'K': 2, 'L': 3, 'M': 4,
+        'N': 5, 'O': 7, 'P': 8, 'Q': 1, 'R': 2, 'S': 3,
+        'T': 4, 'U': 6, 'V': 6, 'W': 6, 'X': 5, 'Y': 1, 'Z': 7
+    },
+    # Chiffres romains
+    'roman_numeral': {
+        'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000
+    },
+    # Scrabble français
+    'scrabble_fr': {
+        'A': 1, 'B': 3, 'C': 3, 'D': 2, 'E': 1, 'F': 4,
+        'G': 2, 'H': 4, 'I': 1, 'J': 8, 'K': 10, 'L': 1, 'M': 2,
+        'N': 1, 'O': 1, 'P': 3, 'Q': 8, 'R': 1, 'S': 1,
+        'T': 1, 'U': 1, 'V': 4, 'W': 10, 'X': 10, 'Y': 10, 'Z': 10
+    },
+    # Scrabble anglais
+    'scrabble_en': {
+        'A': 1, 'B': 3, 'C': 3, 'D': 2, 'E': 1, 'F': 4,
+        'G': 2, 'H': 4, 'I': 1, 'J': 8, 'K': 5, 'L': 1, 'M': 3,
+        'N': 1, 'O': 1, 'P': 3, 'Q': 10, 'R': 1, 'S': 1,
+        'T': 1, 'U': 1, 'V': 4, 'W': 4, 'X': 8, 'Y': 4, 'Z': 10
+    },
+    # Nombre de lettres
+    'n_letters': {
+        'A': 1, 'B': 1, 'C': 1, 'D': 1, 'E': 1, 'F': 1,
+        'G': 1, 'H': 1, 'I': 1, 'J': 1, 'K': 1, 'L': 1, 'M': 1,
+        'N': 1, 'O': 1, 'P': 1, 'Q': 1, 'R': 1, 'S': 1,
+        'T': 1, 'U': 1, 'V': 1, 'W': 1, 'X': 1, 'Y': 1, 'Z': 1
+    },
+}
+
+def gematria(s: str, mapping='french_rank') -> int:
+    """
+    Return the gematria value for each word
+    of given text. The gematria of the word is the
+    sum of the value of each of its letters, following
+    given mapping.
+    """
+    return sum(gematria_words(s=s, mapping=mapping))
+
+def gematria_words(s: str, mapping='french_rank') -> list[int]:
+    """
+    Return the list of gematria value for each word
+    of given text. The gematria of the word is the
+    sum of the value of each of its letters, following
+    given mapping.
+    """
+    if not isinstance(mapping, dict) and mapping not in gematria_dict:
+        raise ValueError(f"'mapping' argument must be in: {set(gematria_dict.keys())}")
+    letter_to_value = gematria_dict[mapping]
+    words = [
+        word.upper()
+        for word in to_words(s, letters_only=True)
+    ]
+
+    gematria_list = []
+    for word in words:
+        sum = 0
+        for letter in word:
+            sum += letter_to_value[letter]
+        gematria_list.append(sum)
+    return gematria_list
+
+def gematria_lines(s: str, mapping='french_rank') -> list[int]:
+    """
+    Return the gematria value for each word
+    of given text. The gematria of the word is the
+    sum of the value of each of its letters, following
+    given mapping.
+    """
+    lines = to_lines(s)
+    gematria_list = [
+        gematria(line, mapping=mapping)
+        for line in lines if line
+    ]
+    return gematria_list
+
+
+####
+# Transformations
+####
+
+# ...
