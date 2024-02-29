@@ -376,7 +376,18 @@ def check_turkish(s: str) -> bool:
 def check_prisoner(s: str, allow_accent=True) -> bool:
     """
     Return True if given text follow the 'prisoner's constraint',
-    False otherwise.
+    False otherwise. In other words, its letters must not have
+    any ascenders (like in 'l', 'k', 'h'...) nor descenders
+    ('y', 'j'...).
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    allow_accent : bool, optional.
+        If True, accents and small ascenders are tolerated.
+        Otherwise, it follows the 'strict' prisoner's
+        constraint. Defaults to True.    
 
     Notes
     -----
@@ -394,6 +405,20 @@ def check_prisoner(s: str, allow_accent=True) -> bool:
         if c in forbidden_char:
             return False
     return True
+
+def check_released_prisoner(s: str) -> bool:
+    """
+    Return True if all letters given text, except vowels
+    have ascenders or descenders, False otherwise.
+
+    Notes
+    -----
+    See also: https://fr.wikipedia.org/wiki/Contrainte_du_prisonnier
+    """
+    return check_beaupresent(
+        s=s,
+        ref='bdfghjklpqt' + vowels_char + ligatures_char
+    )
 
 def check_okapi(s: str) -> bool:
     """

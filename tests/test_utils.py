@@ -106,6 +106,12 @@ class TestConstraintChecker(unittest.TestCase):
         self.assertFalse(check_prisoner("un réseau", allow_accent=False)) # 'é'
         self.assertFalse(check_prisoner("sans un son, sans un sou", allow_accent=False)) # ','
 
+    def test_released_prisoner(self):
+        self.assertTrue(check_released_prisoner(""))
+        self.assertTrue(check_released_prisoner("Je l'ai fait !"))
+        self.assertTrue(check_released_prisoner("kayak"))
+        self.assertFalse(check_released_prisoner("fenouil")) # n
+
     def test_okapi(self):
         self.assertTrue(check_okapi(""))
         self.assertTrue(check_okapi("E"))
