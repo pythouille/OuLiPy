@@ -127,7 +127,7 @@ def to_words(s: str, letters_only=False) -> list[str]:
         if w in s_copy:
             s_copy = s_copy.replace(w, ' ')
     if letters_only:
-        s_copy = remove_accent(s_copy)
+        s_copy = remove_accent(s_copy.lower())
     # Get words (ignore empty strings)
     words = [w for w in s_copy.split(' ') if w]
     return words
@@ -185,11 +185,11 @@ def letter_counter(s: str) -> Counter:
     """
     return Counter(remove_non_word(remove_accent(s.upper())))
 
-def word_counter(s: str) -> Counter:
+def word_counter(s: str, letters_only=False) -> Counter:
     """
     Return a Counter of words of in the text.
     """
-    return Counter(to_words(s))
+    return Counter(to_words(s, letters_only=letters_only))
 
 def chunk(s: str, n: int) -> list[str]:
     """
@@ -721,6 +721,20 @@ def check_mingram(s: str, m: int):
 
     # Compare to smallest value
     return words_lengths[0] >= m
+
+def check_ananym(s1: str, s2: str) -> bool:
+    """
+    Return True if s1 and s2 use exactly the same
+    words, the same amount of time, possibly with
+    a different order; False otherwise.
+
+    Notes
+    -----
+    See also: https://zazipo.net/+-Ananyme-+
+    """
+    w1 = word_counter(s1, letters_only=True)
+    w2 = word_counter(s2, letters_only=True)
+    return w1 == w2
 
 def check_anagram(s1: str, s2: str) -> bool:
     """

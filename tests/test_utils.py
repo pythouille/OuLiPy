@@ -226,6 +226,15 @@ class TestConstraintChecker(unittest.TestCase):
         self.assertFalse(check_mingram("Quand trois gamins disent bonjour...", 6))
         self.assertFalse(check_mingram("fenouil", 8))
 
+    def test_ananym(self):
+        self.assertTrue(check_ananym("", "")) # Empty case
+        self.assertTrue(check_ananym("fenouil", "Fenouil !"))
+        self.assertTrue(check_ananym("Il était une fois...", "Une fois, il était."))
+        self.assertTrue(check_ananym("Il était une fois...", "Fois une, était-il ?"))
+        self.assertFalse(check_ananym("Il était une fois...", "Il était une ?"))
+        self.assertFalse(check_ananym("Il était une fois...", "Il était une noix."))
+        self.assertFalse(check_ananym("Il était une fois...", "Il était une fois, voilà."))
+
     def test_anagram(self):
         self.assertTrue(check_anagram("", "")) # Empty case
         self.assertTrue(check_anagram("abcd", "dbca"))
