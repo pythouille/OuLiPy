@@ -37,6 +37,14 @@ class TestConstraintChecker(unittest.TestCase):
         #NOTE: need for treating separate cases for "'" or "-"?
         #self.assertEqual(to_words("Aujourd'hui, c'est lundi ! Eh."), ["Aujourd'hui", "c", "est", "lundi", "Eh"])
 
+    def test_isosceles(self):
+        self.assertTrue(check_isosceles(""))
+        self.assertTrue(check_isosceles("fenouil"))
+        self.assertTrue(check_isosceles("Fenouil\nun jour")) # length 7
+        self.assertTrue(check_isosceles("Fenouil\n\nun jour")) # skip empty line
+        self.assertTrue(check_isosceles("123456\n123.56\n1.0.56")) # length 6
+        self.assertFalse(check_isosceles("Fenouil\ntoujours")) # 7 != 8
+
     def test_palindrom(self):
         self.assertTrue(check_palindrom(""))
         self.assertTrue(check_palindrom("kayak"))

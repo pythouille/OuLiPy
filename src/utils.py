@@ -224,6 +224,17 @@ def count_common(s1: str, s2: str) -> int:
 # Constraint checker
 ####
 
+def check_isosceles(s: str) -> bool:
+    """
+    Return True if all the lines in given
+    text share the same number of characters
+    (whitespace included); False otherwise.
+    """
+    # Get distinct strictly positive lengths
+    line_lengths = set([len(line) for line in to_lines(s) if line])
+    # Check the number of distinct line lengths
+    return len(line_lengths) <= 1
+
 def check_palindrom(s: str) -> bool:
     """
     Return True if given text is a palindrom, False otherwise.
