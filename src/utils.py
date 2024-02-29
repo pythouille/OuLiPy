@@ -460,17 +460,25 @@ def check_tautogram(s: str, start_with=None) -> bool:
             return False
     return True
 
-def check_acrostic(s: str, ref: str, by_words=False) -> bool:
+def check_acrostic(s: str, ref: str, by_words=False, check_length=True) -> bool:
     """
+    Return True if all the lines (or words) begin by
+    the letters of the reference word, in order;
+    False otherwise.
+
     Parameters
     ----------
     s : str
-        Text to check.
+        Target text.
     ref : str
         Characters to be found at the beginning of each line or words.
     by_words : bool, optional
         If False, check the beginning of each line. If True,
         check the beginning of each word. Defaults to False.
+    check_length : bool, optional
+        If True, target text must have exactly the same number
+        of lines (or words) as the reference text. Defaults to
+        True.
     
     Notes
     -----
@@ -481,12 +489,38 @@ def check_acrostic(s: str, ref: str, by_words=False) -> bool:
         units = to_words(s.lower(), letters_only=True)
     else:
         units = to_lines(s.lower(), letters_only=True)
-    if len(units) != len(ref):
+    if check_length and (len(units) != len(ref)):
+        print(ref, "Wrong length")
         return False
-    for u, c in zip(units, ref):
-        if u[0] != c:
+    for i, u in enumerate(units):
+        if u[0] != ref[i%len(ref)]:
             return False
     return True
+
+def check_progressive_tautogram(s: str, ref: str) -> bool:
+    """
+    Return True if the beginning of each successive word
+    in given text follow the order of given reference
+    (looping on given characters), False otherwise.
+
+    Parameters
+    ----------
+    s : str
+        Text to check.
+    ref : str
+        Characters to be found at the beginning of each words,
+        successively.
+    
+    Notes
+    -----
+    See also: https://www.oulipo.net/fr/contraintes/tautogramme-progressif
+    """
+    return check_acrostic(
+        s=s,
+        ref=ref,
+        by_words=True,
+        check_length=False
+    )
 
 def check_universal_acrostic(s: str) -> bool:
     """
@@ -499,7 +533,7 @@ def check_universal_acrostic(s: str) -> bool:
     See also: https://www.oulipo.net/fr/contraintes/acrostiche-universel
     """
     return check_acrostic(
-        s,
+        s=s,
         ref=string.ascii_lowercase,
         by_words=False
     )

@@ -132,6 +132,13 @@ class TestConstraintChecker(unittest.TestCase):
         self.assertFalse(check_acrostic("Il était une xxxx...", "ieuf", by_words=True))
         self.assertFalse(check_acrostic("Il était une...", "ieuf", by_words=True))
 
+    def test_progressive_tautogram(self):
+        self.assertTrue(check_progressive_tautogram("", ""))
+        self.assertTrue(check_progressive_tautogram("fenouil", "f"))
+        self.assertTrue(check_progressive_tautogram("fenouil fini", "f"))
+        self.assertTrue(check_progressive_tautogram("Il était une fois, il était une fin...", "ieuf"))
+        self.assertFalse(check_progressive_tautogram("Il était une fois, il était un test.", "ieuf"))
+
     def test_universal_acrostic(self):
         self.assertTrue(check_universal_acrostic(
             "A\nb\nc\nd\ne\nf\ng\nh\ni\nj\n"\
