@@ -229,14 +229,14 @@ class TestConstraintChecker(unittest.TestCase):
         self.assertFalse(check_subanagram("eeee", "Éeê")) # Not enough letters
         self.assertFalse(check_subanagram("abc", "abd")) # Missing C in reference
 
-    def test_ulceration(self):
-        self.assertTrue(check_ulcerations("", "ULCERATIONS")) # Empty case
-        self.assertTrue(check_ulcerations("ulcerations", "ULCERATIONS"))
-        self.assertTrue(check_ulcerations("Taclé, ou rins", "ULCERATIONS"))
-        self.assertTrue(check_ulcerations("Taclé, ou rinsul cé ra tison.", "ULCERATIONS"))
-        self.assertFalse(check_ulcerations("fenouil", "ULCERATIONS"))
-        self.assertFalse(check_ulcerations("lcerations", "ULCERATIONS"))
-        self.assertFalse(check_ulcerations("ulcerations, et...", "ULCERATIONS"))
+    def test_heterogram(self):
+        self.assertTrue(check_heterogram("", "ULCERATIONS")) # Empty case
+        self.assertTrue(check_heterogram("ulcerations", "ULCERATIONS"))
+        self.assertTrue(check_heterogram("Taclé, ou rins", "ULCERATIONS"))
+        self.assertTrue(check_heterogram("Taclé, ou rinsul cé ra tison.", "ULCERATIONS"))
+        self.assertFalse(check_heterogram("fenouil", "ULCERATIONS"))
+        self.assertFalse(check_heterogram("lcerations", "ULCERATIONS"))
+        self.assertFalse(check_heterogram("ulcerations, et...", "ULCERATIONS"))
 
     def test_pangram(self):
         self.assertTrue(check_pangram("Portez ce whisky au vieux juge blond qui fume."))

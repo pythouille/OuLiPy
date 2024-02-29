@@ -231,6 +231,14 @@ def check_palindrom(s: str) -> bool:
     are the same for every i.
 
     Punctuation, spaces, accents and cases are ignored.
+
+    Notes
+    -----
+    This function only check palindrom of letters.
+
+    See also:
+    - https://en.wikipedia.org/wiki/Palindrome
+    - https://zazipo.net/+-Palindrome-+
     """
     s_copy = s.lower()
     s_copy = remove_non_word(s_copy)
@@ -243,7 +251,7 @@ def check_palindrom(s: str) -> bool:
 def check_antipalindrom(s: str) -> bool:
     """
     Return True if given text is a anti-palindrom, False otherwise.
-    In a anti-palindrom of size N, the i-th and (N-i)-th letters
+    In an anti-palindrom of size N, the i-th and (N-i)-th letters
     are always different.
 
     Punctuation, spaces, accents and cases are ignored.
@@ -260,6 +268,12 @@ def check_beaupresent(s: str, ref: str) -> bool:
     """
     Return True if given text uses only letters that are
     also present in reference string, False otherwise.
+
+    Notes
+    -----
+    See also:
+    - https://oulipo.net/fr/contraintes/beau-present
+    - https://www.zazipo.net/+-Beau-present-+
     """
     # 
     s_copy = remove_non_word(remove_accent(s.lower()))
@@ -278,6 +292,10 @@ def check_lipogram(s: str, forbidden: str) -> bool:
 
     For example, a lipogram in 'E' must not use the letter
     E (with or without accent, with or without uppercase).
+
+    Notes
+    -----
+    See also: https://www.oulipo.net/fr/contraintes/lipogramme
     """
     s_copy = s.lower()
     s_copy = remove_accent(s_copy)
@@ -297,15 +315,23 @@ def check_monovocalism(s: str, vowel=None) -> bool:
         Text to check.
     vowel : str, optional
         Single character, the only vowel that can be used in
-        the text. Defaults to None (any vowel can be used,
-        but only one for all the text).
+        the text. Two or more vowel can also be given for
+        bivocalism, trivocalism etc. Defaults to None
+        (any vowel can be used, but only one for all the text).
+
+    Notes
+    -----
+    See also:
+    - https://www.zazipo.net/+-Monovocalisme-609-+
+    - https://www.oulipo.net/fr/contraintes/monovocalisme
+    - https://www.oulipo.net/fr/contraintes/bivocalisme
     """
     s_vowels = set(to_vowels(s))
     n_vowels = len(s_vowels)
     if n_vowels > 1:
         return False
     if vowel:
-        if vowel not in 'aeiouy':
+        if not (set(vowel) < set('aeiouy')):
             raise ValueError("Please chose target voyel in 'aeiuoy'.")
         if vowel not in s_vowels:
             return False
@@ -315,6 +341,10 @@ def check_heteroconsonantism(s: str) -> bool:
     """
     Return True if each consonant appears only once in
     the source text, False otherwise.
+
+    Notes
+    -----
+    See also: https://zazipo.net/+-Heteroconsonnantisme-+
     """
     s_consonants = set(to_consonants(s))
     n_consonants = len(s_consonants)
@@ -348,7 +378,11 @@ def check_prisoner(s: str, allow_accent=True) -> bool:
     Return True if given text follow the 'prisoner's constraint',
     False otherwise.
 
-    https://fr.wikipedia.org/wiki/Contrainte_du_prisonnier
+    Notes
+    -----
+    See also:
+    - https://zazipo.net/+-Prisonnier-+
+    - https://fr.wikipedia.org/wiki/Contrainte_du_prisonnier
     """
     # Build list of forbidden characters
     forbidden_char = descender_char + ascender_char
@@ -365,6 +399,10 @@ def check_okapi(s: str) -> bool:
     """
     Return True if source has is an alternation
     of vowels and consonants, False otherwise.
+
+    Notes
+    -----
+    See also: https://zazipo.net/+-Okapi-+
     """
     if not s:
         return True
@@ -402,6 +440,12 @@ def check_tautogram(s: str, start_with=None) -> bool:
     start_with : str, optional
         Single character imposed at the beginning of each word.
         Default value is the first letter of the text.
+    
+    Notes
+    -----
+    See also:
+    - https://www.oulipo.net/fr/contraintes/tautogramme
+    - https://zazipo.net/+-Tautogramme-+
     """
     # Remove accent, uppercase, and get words only
     words = to_words(remove_accent(s.lower()))
@@ -427,6 +471,10 @@ def check_acrostic(s: str, ref: str, by_words=False) -> bool:
     by_words : bool, optional
         If False, check the beginning of each line. If True,
         check the beginning of each word. Defaults to False.
+    
+    Notes
+    -----
+    See also: https://zazipo.net/+-Acrostiche-+
     """
     # Remove accent, uppercase, and get words only
     if by_words:
@@ -445,6 +493,10 @@ def check_universal_acrostic(s: str) -> bool:
     Return True if all 26 lines in given text
     begin with the successive letters in latin
     alphabet, False otherwise.
+
+    Notes
+    -----
+    See also: https://www.oulipo.net/fr/contraintes/acrostiche-universel
     """
     return check_acrostic(
         s,
@@ -457,6 +509,12 @@ def check_abecedaire(s: str) -> bool:
     Return True if all 26 words in given text
     begin with the successive letters in latin
     alphabet (an 'abécédaire'), False otherwise. 
+
+    Notes
+    -----
+    See also:
+    - https://www.oulipo.net/fr/contraintes/abecedaire
+    - https://zazipo.net/+-Abecedaire-756-+
     """
     return check_acrostic(
         s,
@@ -488,6 +546,10 @@ def check_sympathetic(s: str, min=1) -> bool:
     min : int, optional
         Minimal required number of common letters
         between each successive words. Defaults to 1. 
+
+    Notes
+    -----
+    See also: https://zazipo.net/+-Sympathique-+
     """
     words = to_words(s)
     for i in range(len(words)-1):
@@ -499,6 +561,10 @@ def check_snob(s: str) -> bool:
     """
     Return True if all successive words in given text
     share no common letter, False otherwise.
+
+    Notes
+    -----
+    See also: https://zazipo.net/+-Snob-+
     """
     words = to_words(s)
     for i in range(len(words)-1):
@@ -519,6 +585,10 @@ def check_ngram(s: str, n=None) -> bool:
         Required length(s) for each word of given text.
         By default, only check that all the words have
         the same length.
+
+    Notes
+    -----
+    See also: https://zazipo.net/+-X-gramme-+
     """
     # Extract word lengths
     words_lengths = [len(word) for word in to_words(s)]
@@ -556,6 +626,10 @@ def check_maxgram(s: str, m: int):
         Source text.
     m : int
         If given, each word must have 'max' letters or less.
+   
+    Notes
+    -----
+    See also: https://zazipo.net/+-X-gramme-+
     """
     # Extract words length
     words_lengths = [len(word) for word in to_words(s)]
@@ -577,6 +651,10 @@ def check_mingram(s: str, m: int):
         Source text.
     m : int
         If given, each word must have 'm' letters or more.
+
+    Notes
+    -----
+    See also: https://zazipo.net/+-X-gramme-+
     """
     # Extract words length
     words_lengths = [len(word) for word in to_words(s)]
@@ -591,6 +669,12 @@ def check_anagram(s1: str, s2: str) -> bool:
     """
     Return True if s1 and s2 use exactly the same
     letters, the same amount of time; False otherwise.
+
+    Notes
+    -----
+    See also:
+    - https://www.oulipo.net/fr/contraintes/anagramme
+    - https://zazipo.net/+-Anagramme-+
     """
     return letter_counter(s1) == letter_counter(s2)
 
@@ -601,7 +685,7 @@ def check_subanagram(s_sub: str, s_ref: str) -> bool:
     """
     return letter_counter(s_sub) <= letter_counter(s_ref)
 
-def check_ulcerations(s: str, ref: str = 'ULCERATIONS') -> bool:
+def check_heterogram(s: str, ref: str = 'ULCERATIONS') -> bool:
     """
     Return True if given text is built by successive anagrams
     of given reference text.
@@ -614,6 +698,11 @@ def check_ulcerations(s: str, ref: str = 'ULCERATIONS') -> bool:
         Reference word, or letters, to follow.
         Defaults to 'ULCERATIONS', or the 11 most used
         letters in French.
+    
+    Notes
+    -----
+    - https://www.zazipo.net/+-Heterogramme-+
+    - https://www.zazipo.net/+-Ulcerations-+
     """
     ref_letters = remove_non_word(remove_accent(ref.lower()))
 
@@ -632,8 +721,14 @@ def check_pangram(s: str, alphabet=None) -> bool:
 
     Parameters
     ----------
+    s : str
+        Source text.
     alphabet : str, optional
         Check a given alphabet. Defaults to None.
+    
+    Notes
+    -----
+    See also: https://zazipo.net/+-Pangramme-+
     """
     if alphabet is None:
         # By default, latin alphabet
@@ -646,12 +741,20 @@ def check_panscrabblogram(s: str, lang='fr') -> bool:
     Return True if the text is made of (and only of)
     all the letters in a box of Scrabble.
 
+    #TODO: add 2 jokers
+
     Parameters
     ----------
+    s : str
+        Source text.
     lang: str in {'fr', 'en'}
         Language of reference. Available languages
         are French ('fr') and English ('en').
         Defaults to French.
+    
+    Notes
+    -----
+    See also: https://zazipo.net/+-Panscrabblogramme-594-+
     """
     available_lang = {
         # French
@@ -670,6 +773,12 @@ def check_asupposer(s: str) -> bool:
     False otherwise. In other wordes, this function checks
     that there is no terminal punctuation (./!/?) and that
     there are more than 1000 characters.
+
+    Notes
+    -----
+    See also:
+    - https://www.oulipo.net/fr/contraintes/a-supposer
+    - https://zazipo.net/+-A-supposer-502-+
     """
     size = len(s)
     # Consider '...' as authorized punctuation
