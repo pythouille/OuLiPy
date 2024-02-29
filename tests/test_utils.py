@@ -243,6 +243,16 @@ class TestConstraintChecker(unittest.TestCase):
         self.assertFalse(check_ananym("Il était une fois...", "Il était une noix."))
         self.assertFalse(check_ananym("Il était une fois...", "Il était une fois, voilà."))
 
+    def test_arithmonym(self):
+        self.assertTrue(check_arithmonym(""))
+        self.assertTrue(check_arithmonym("fenouil"))
+        self.assertTrue(check_arithmonym("Il était\nune fois..."))
+        self.assertTrue(check_arithmonym("Il était une fois...", "un jour, une nuit."))
+        self.assertTrue(check_arithmonym("Il était une fois...", "un jour,\nune nuit."))
+        self.assertFalse(check_arithmonym("Il était une\nfois..."))
+        self.assertFalse(check_arithmonym("", "fenouil"))
+        self.assertFalse(check_arithmonym("Il était une fois...", "Un jour seulement."))
+
     def test_anagram(self):
         self.assertTrue(check_anagram("", "")) # Empty case
         self.assertTrue(check_anagram("abcd", "dbca"))

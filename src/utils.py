@@ -747,6 +747,23 @@ def check_ananym(s1: str, s2: str) -> bool:
     w2 = word_counter(s2, letters_only=True)
     return w1 == w2
 
+def check_arithmonym(s: str, other_s: str = "") -> bool:
+    """
+    Return True if each line of given text has
+    the same number of words, False otherwise.
+    If a second string is given, return True if
+    both strings have the same number of words.
+    """
+    if other_s:
+        return len(to_words(s)) == len(to_words(other_s))
+    lines = to_lines(s)
+
+    n_words = [
+        len(to_words(line))
+        for line in lines
+    ]
+    return len(set(n_words)) <= 1
+
 def check_anagram(s1: str, s2: str) -> bool:
     """
     Return True if s1 and s2 use exactly the same
