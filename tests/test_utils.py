@@ -3,8 +3,7 @@ import unittest
 from src.utils import *
 
 
-
-class TestConstraintChecker(unittest.TestCase):
+class TestUtils(unittest.TestCase):
     def test_remove_non_word(self):
         self.assertEqual(remove_non_word(""), "")
         self.assertEqual(remove_non_word("fenouil"), "fenouil")
@@ -37,6 +36,8 @@ class TestConstraintChecker(unittest.TestCase):
         #NOTE: need for treating separate cases for "'" or "-"?
         #self.assertEqual(to_words("Aujourd'hui, c'est lundi ! Eh."), ["Aujourd'hui", "c", "est", "lundi", "Eh"])
 
+
+class TestConstraintChecker(unittest.TestCase):
     def test_isosceles(self):
         self.assertTrue(check_isosceles(""))
         self.assertTrue(check_isosceles("fenouil"))
@@ -350,6 +351,27 @@ class TestConstraintChecker(unittest.TestCase):
         ))
         self.assertFalse(check_asupposer(""))
         self.assertFalse(check_asupposer("fenouil"))
+
+
+class TestStatistics(unittest.TestCase):
+    def test_gematria(self):
+        self.assertEqual(gematria(""), 0)
+        self.assertEqual(gematria("fenouil"), 82) # = 6+5+14+15+9+12
+        self.assertEqual(gematria("FênOuil !"), 82)
+        self.assertEqual(gematria("Fenouil, fenouil ?"), 164)
+
+    def test_gematria_words(self):
+        self.assertEqual(gematria_words(""), [])
+        self.assertEqual(gematria_words("fenouil"), [82])
+        self.assertEqual(gematria_words("FênOuil !"), [82])
+        self.assertEqual(gematria_words("Fenouil, fenouil ?"), [82, 82])
+
+    def test_gematria_lines(self):
+        self.assertEqual(gematria_lines(""), [])
+        self.assertEqual(gematria_lines("fenouil"), [82])
+        self.assertEqual(gematria_lines("FênOuil !"), [82])
+        self.assertEqual(gematria_lines("fenouil\n"), [82])
+        self.assertEqual(gematria_lines("fenouil fenouil...\nFenouil !"), [164, 82])
 
 
 
