@@ -111,7 +111,7 @@ def to_lines(s: str, letters_only=False) -> list[str]:
     lines = [line for line in s.split('\n') if line]
     # Clean lines
     if letters_only:
-        lines = [remove_accent(remove_non_word(line)) for line in lines]
+        lines = [remove_accent(remove_non_word(line.lower())) for line in lines]
 
     return lines
 
@@ -279,6 +279,14 @@ def check_beaupresent(s: str, ref: str) -> bool:
     """
     Return True if given text uses only letters that are
     also present in reference string, False otherwise.
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    ref : str
+        Word, or name, containing the only letters
+        that can be used in source text.
 
     Notes
     -----
@@ -887,6 +895,53 @@ def check_panscrabblogram(s: str, lang='fr') -> bool:
         raise ValueError(f"'lang' argument must be in {set(available_lang.keys())}")
 
     return check_anagram(available_lang[lang], s)
+
+def check_belleabsente(s: str, ref: str = None) -> bool:
+    """
+    Return True if the i-th line does not contain the i-th
+    letter of a reference word, False otherwise. Each line
+    must also contain each other letter of the alphabet
+    (except K, W, X, Y and Z).
+
+    Parameters
+    ----------
+    s : str
+        Source text.
+    ref : str, optional
+        Word, or name, containing the letters
+        that are forbidden in the successive
+        lines of the source text.
+
+    Notes
+    -----
+    See also:
+    - https://zazipo.net/+-Belle-absente-505-+
+    - https://oulipo.net/fr/contraintes/belle-absente
+    """
+    # Clean arguments
+    lines = to_lines(s, letters_only=True)
+    if ref:
+        ref = remove_non_word(remove_accent(ref.lower()))
+        if len(lines) != len(ref):
+            # Must have as many lines as letters in target word
+            return False
+    # Check each line
+    for i, line in enumerate(lines):
+        letters = set(line)
+        missing_letters = set(string.ascii_lowercase).difference(letters)
+        if not missing_letters:
+            # One letter should be missing
+            return False
+        if ref:
+            if ref[i] not in missing_letters:
+                # A forbidden letter have been found
+                return False
+        # Remove unnecessary K, W, X, Y and Z
+        missing_letters = missing_letters.difference(set('kwxyz'))
+        if len(missing_letters) > 1:
+            # Several possible letters... There should be only one
+            return False
+    return True
 
 def check_asupposer(s: str) -> bool:
     """

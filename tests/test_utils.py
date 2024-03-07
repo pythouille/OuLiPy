@@ -309,6 +309,16 @@ class TestConstraintChecker(unittest.TestCase):
         with self.assertRaises(ValueError):
             check_panscrabblogram("fenouil", lang='es')
 
+    def test_belleabsente(self):
+        self.assertTrue(check_belleabsente(""))
+        self.assertTrue(check_belleabsente("Bcde fghi jlmno pqr stuvw\nAcdefg hijlmno pqrstuvy"))
+        self.assertTrue(check_belleabsente("Bcde fghi jlmno pqr stuvw\nAcdefg hijlmno pqrstuvy", ref="AB"))
+        self.assertTrue(check_belleabsente("Bcde fghi jklmno pqr stuvwxyz\nAcdefg hijklmno pqrstuvwxyz", ref="AB"))
+        self.assertFalse(check_belleabsente("Bcde fghi jlmno pqr stuvw\nAcdefg hijlmno pqrstuvy", ref="ABC")) # len()
+        self.assertFalse(check_belleabsente("ABcde fghi jlmno pqr stuvw\nAcdefg hijlmno pqrstuvy", ref="AB")) # A
+        self.assertFalse(check_belleabsente("abcdefghijklmnopqrstuvwxyz\nAcdefg hijlmno pqrstuvy")) # No missing letter
+        self.assertFalse(check_belleabsente("fenouil", ref=""))
+
     def test_asupposer(self):
         self.assertTrue(check_asupposer(
             "À supposer qu'on me demande ici de rédiger un à-supposer qui "\
