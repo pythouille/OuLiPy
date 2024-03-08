@@ -11,8 +11,8 @@ from typing import List
 # Global variables
 ####
 
-vowels_char = "aeiouy"
-consonants_char = "bcdfghjklmnpqrstvwxz"
+vowels_char = "AEIOUY"
+consonants_char = "BCDFGHJKLMNPQRSTVWXZ"
 
 accent_to_letter = { # Non exhaustive list
     # Lower case
@@ -33,7 +33,8 @@ accent_to_letter = { # Non exhaustive list
     'Ç': 'C',
 }
 accents_char = ''.join(accent_to_letter.keys())
-ligatures_char = ''.join(['æ', 'œ', 'Æ', 'Œ'])
+ligature_to_letter = {'æ':'ae', 'œ':'oe', 'Æ':'AE', 'Œ': 'OE'}
+ligatures_char = ''.join(ligature_to_letter.keys())
 
 low_ascender_char = ''.join([ # Accent outside the mean line
     'â', 'ä', 'á', 'à', 'ã',
@@ -68,7 +69,7 @@ def remove_punctuation(s: str, replace_char='') -> str:
             s_copy = s_copy.replace(c, replace_char)
     return s_copy
 
-def remove_non_word(s: str) -> str:
+def remove_non_word(s: str, replace_char='') -> str:
     """
     Return a copy of given string without
     its punctuation and white space (which
@@ -82,7 +83,7 @@ def remove_non_word(s: str) -> str:
     for c in string.whitespace:
         # Replace all whitespace, and erased punctuation
         if c in s_copy:
-            s_copy = s_copy.replace(c, '')
+            s_copy = s_copy.replace(c, replace_char)
     return s_copy
 
 def remove_accent(s: str) -> str:
@@ -103,17 +104,29 @@ def remove_accent(s: str) -> str:
             print(f"WARNING: unknown character: {c}")
     return s_copy
 
-def to_lines(s: str, letters_only=False) -> list[str]:
+def remove_ligature(s: str) -> str:
     """
-    Return a list of lines in given text.
+    Return a copy of given string with ligature
+    replaced by separated letters.
     """
-    # Get non-blank lines
-    lines = [line for line in s.split('\n') if line]
-    # Clean lines
-    if letters_only:
-        lines = [remove_accent(remove_non_word(line.lower())) for line in lines]
+    s_copy = s
+    for c in ligatures_char:
+        s_copy = s_copy.replace(c, ligature_to_letter[c])
+    return s_copy
 
-    return lines
+def to_letters(s: str) -> str:
+    """
+    Return a copy of given text with only its letters,
+    standardized to uppercase, without accent or
+    ligature, remove all non-word characters and spaces.
+    """
+    return remove_non_word(
+        remove_accent(
+            remove_ligature(
+                s.upper()
+            )
+        )
+    )
 
 def to_words(s: str, letters_only=False) -> list[str]:
     """
@@ -126,11 +139,23 @@ def to_words(s: str, letters_only=False) -> list[str]:
     for w in string.whitespace:
         if w in s_copy:
             s_copy = s_copy.replace(w, ' ')
-    if letters_only:
-        s_copy = remove_accent(s_copy.lower())
     # Get words (ignore empty strings)
     words = [w for w in s_copy.split(' ') if w]
+    if letters_only:
+        words = [to_letters(w) for w in words]
     return words
+
+def to_lines(s: str, letters_only=False) -> list[str]:
+    """
+    Return a list of lines in given text.
+    """
+    # Get non-blank lines
+    lines = [line for line in s.split('\n') if line]
+    # Clean lines
+    if letters_only:
+        lines = [to_letters(line) for line in lines]
+
+    return lines
 
 def filter_letters(s: str, filter: str) -> str:
     """
@@ -148,9 +173,8 @@ def filter_letters(s: str, filter: str) -> str:
         Other letters are removed.
     """
     # Clean data
-    s_copy = s.lower()
-    s_copy = remove_non_word(s_copy)
-    s_copy = remove_accent(s_copy)
+    s_copy = to_letters(s)
+    filter = to_letters(filter)
     # Get target letters only
     s_filtered = []
     for char in s_copy:
@@ -183,7 +207,7 @@ def letter_counter(s: str) -> Counter:
 
     Spaces, punctuation, accents are discarded.
     """
-    return Counter(remove_non_word(remove_accent(s.upper())))
+    return Counter(to_letters(s))
 
 def word_counter(s: str, letters_only=False) -> Counter:
     """
@@ -196,7 +220,7 @@ def chunk(s: str, n: int) -> list[str]:
     Return a list of string of size n, extracted
     from successive letters in given string 's'.
     """
-    s_copy = remove_non_word(remove_accent(s.lower()))
+    s_copy = to_letters(s)
 
     chunk_list = []
     char_pointer = 0
@@ -211,8 +235,8 @@ def count_common(s1: str, s2: str) -> int:
     Return the number of letters that are
     present in both words.
     """
-    s1_letters = remove_accent(s1.lower())
-    s2_letters = remove_accent(s2.lower())
+    s1_letters = to_letters(s1)
+    s2_letters = to_letters(s2)
     count = 0
     for c in s1_letters:
         if c in s2_letters:
@@ -251,9 +275,7 @@ def check_palindrom(s: str) -> bool:
     - https://en.wikipedia.org/wiki/Palindrome
     - https://zazipo.net/+-Palindrome-+
     """
-    s_copy = s.lower()
-    s_copy = remove_non_word(s_copy)
-    s_copy = remove_accent(s_copy)
+    s_copy =  to_letters(s)
     for i in range(len(s_copy)//2):
         if s_copy[i] != s_copy[len(s_copy)-1-i]:
             return False
@@ -267,9 +289,7 @@ def check_antipalindrom(s: str) -> bool:
 
     Punctuation, spaces, accents and cases are ignored.
     """
-    s_copy = s.lower()
-    s_copy = remove_non_word(s_copy)
-    s_copy = remove_accent(s_copy)
+    s_copy = to_letters(s)
     for i in range(len(s_copy)//2):
         if s_copy[i] == s_copy[len(s_copy)-1-i]:
             return False
@@ -295,8 +315,8 @@ def check_beaupresent(s: str, ref: str) -> bool:
     - https://www.zazipo.net/+-Beau-present-+
     """
     # 
-    s_copy = remove_non_word(remove_accent(s.lower()))
-    ref_letters = remove_non_word(remove_accent(ref.lower()))
+    s_copy = to_letters(s)
+    ref_letters = to_letters(ref)
 
     # Check constraint
     for c in s_copy:
@@ -316,8 +336,8 @@ def check_lipogram(s: str, forbidden: str) -> bool:
     -----
     See also: https://www.oulipo.net/fr/contraintes/lipogramme
     """
-    s_copy = s.lower()
-    s_copy = remove_accent(s_copy)
+    s_copy = to_letters(s)
+    forbidden = to_letters(forbidden)
     for c in s_copy:
         if c in forbidden:
             return False
@@ -350,9 +370,10 @@ def check_monovocalism(s: str, vowel=None) -> bool:
     if n_vowels > 1:
         return False
     if vowel:
-        if not (set(vowel) < set('aeiouy')):
-            raise ValueError("Please chose target voyel in 'aeiuoy'.")
-        if vowel not in s_vowels:
+        vowel_upper = vowel.upper()
+        if not (set(vowel_upper) < set(vowels_char)):
+            raise ValueError(f"Please chose target voyel in {vowels_char}.")
+        if vowel_upper not in s_vowels:
             return False
     return True
 
@@ -389,7 +410,7 @@ def check_turkish(s: str) -> bool:
     constraint. However, current implementation of the function would
     return False.
     """
-    return check_lipogram(s, forbidden="bfmpv")
+    return check_lipogram(s, forbidden="BFMPV")
 
 def check_prisoner(s: str, allow_accent=True) -> bool:
     """
@@ -450,11 +471,9 @@ def check_okapi(s: str) -> bool:
     if not s:
         return True
     # Extract letters only
-    s_copy = s.lower()
-    s_copy = remove_non_word(s_copy)
-    s_copy = remove_accent(s_copy)
+    s_copy = to_letters(s)
     # Check alternation
-    previous_is_vowel = s[0] in vowels_char
+    previous_is_vowel = s_copy[0] in vowels_char
     for c in s_copy[1:]:
         if c in vowels_char:
             if previous_is_vowel:
@@ -491,13 +510,16 @@ def check_tautogram(s: str, start_with=None) -> bool:
     - https://zazipo.net/+-Tautogramme-+
     """
     # Remove accent, uppercase, and get words only
-    words = to_words(remove_accent(s.lower()))
+    words = to_words(s, letters_only=True)
     if start_with is None:
         if not s:
             return True
-        start_with = words[0][0]
+        start_with = words[0][0].upper()
     elif len(start_with) != 1:
         raise ValueError("'start_with' must be only one character.")
+    else:
+        start_with = start_with.upper()
+    # Check each word
     for w in words:
         if w[0] != start_with:
             return False
@@ -529,9 +551,11 @@ def check_acrostic(s: str, ref: str, by_words=False, check_length=True) -> bool:
     """
     # Remove accent, uppercase, and get words only
     if by_words:
-        units = to_words(s.lower(), letters_only=True)
+        units = to_words(s, letters_only=True)
     else:
-        units = to_lines(s.lower(), letters_only=True)
+        units = to_lines(s, letters_only=True)
+    ref = to_letters(ref)
+
     if check_length and (len(units) != len(ref)):
         return False
     for i, u in enumerate(units):
@@ -576,7 +600,7 @@ def check_universal_acrostic(s: str) -> bool:
     """
     return check_acrostic(
         s=s,
-        ref=string.ascii_lowercase,
+        ref=string.ascii_uppercase,
         by_words=False
     )
 
@@ -594,7 +618,7 @@ def check_abecedaire(s: str) -> bool:
     """
     return check_acrostic(
         s,
-        ref=string.ascii_lowercase,
+        ref=string.ascii_uppercase,
         by_words=True
     )
 
@@ -604,7 +628,7 @@ def check_kyrielle(s: str) -> bool:
     is the same letter as the first letter of the
     following word ('kyrielle').
     """
-    words = to_words(remove_accent(s.lower()))
+    words = to_words(s, letters_only=True)
     for i in range(len(words)-1):
         if words[i][-1] != words[i+1][0]:
             return False
@@ -627,7 +651,7 @@ def check_sympathetic(s: str, min=1) -> bool:
     -----
     See also: https://zazipo.net/+-Sympathique-+
     """
-    words = to_words(s)
+    words = to_words(s, letters_only=True)
     for i in range(len(words)-1):
         if count_common(words[i], words[i+1]) < min:
             return False
@@ -642,7 +666,7 @@ def check_snob(s: str) -> bool:
     -----
     See also: https://zazipo.net/+-Snob-+
     """
-    words = to_words(s)
+    words = to_words(s, letters_only=True)
     for i in range(len(words)-1):
         if count_common(words[i], words[i+1]) != 0:
             return False
@@ -811,7 +835,7 @@ def check_heterogram(s: str, ref: str = 'ULCERATIONS') -> bool:
     - https://www.zazipo.net/+-Heterogramme-+
     - https://www.zazipo.net/+-Ulcerations-+
     """
-    ref_letters = remove_non_word(remove_accent(ref.lower()))
+    ref_letters = to_letters(ref)
 
     chunks = chunk(s, len(ref_letters))
     for c in chunks:
@@ -819,11 +843,11 @@ def check_heterogram(s: str, ref: str = 'ULCERATIONS') -> bool:
             return False
     return True
 
-def check_ulcerations(s: str, tone='c'):
+def check_ulcerations(s: str, tone='C'):
     """
     Return True if given text is an heterogram
     based on 'Ulcerations', with possibly a
-    specific letter instead of 'c'.
+    specific letter instead of 'C'.
 
     Parameters
     ----------
@@ -831,7 +855,7 @@ def check_ulcerations(s: str, tone='c'):
         Source text.
     tone : str, optional
         Reference letter to be added to the 10 most
-        common letters in French. Defaults to 'c'
+        common letters in French. Defaults to 'C'
         ("Ul(c)érations sur ton de C").
 
     Notes
@@ -861,7 +885,7 @@ def check_pangram(s: str, alphabet=None) -> bool:
     """
     if alphabet is None:
         # By default, latin alphabet
-        alphabet = string.ascii_lowercase
+        alphabet = string.ascii_uppercase
 
     return check_subanagram(alphabet, s)
 
@@ -887,9 +911,9 @@ def check_panscrabblogram(s: str, lang='fr') -> bool:
     """
     available_lang = {
         # French
-        'fr': "aaaaaaaaabbccdddeeeeeeeeeeeeeeeffgghhiiiiiiiijklllllmmmnnnnnnooooooppqrrrrrrssssssttttttuuuuuuvvwxyz",
+        'fr': "AAAAAAAAABBCCDDDEEEEEEEEEEEEEEEFFGGHHIIIIIIIIJKLLLLLMMMNNNNNNOOOOOOPPQRRRRRRSSSSSSTTTTTTUUUUUUVVWXYZ",
         # English
-        'en': "aaaaaaaaabbccddddeeeeeeeeeeeeffggghhiiiiiiiiijkllllmmnnnnnnooooooooppqrrrrrrssssttttttuuuuvvwwxyyz"
+        'en': "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ"
     }
     if lang not in available_lang:
         raise ValueError(f"'lang' argument must be in {set(available_lang.keys())}")
@@ -921,14 +945,14 @@ def check_belleabsente(s: str, ref: str = None) -> bool:
     # Clean arguments
     lines = to_lines(s, letters_only=True)
     if ref:
-        ref = remove_non_word(remove_accent(ref.lower()))
+        ref = to_letters(ref)
         if len(lines) != len(ref):
             # Must have as many lines as letters in target word
             return False
     # Check each line
     for i, line in enumerate(lines):
         letters = set(line)
-        missing_letters = set(string.ascii_lowercase).difference(letters)
+        missing_letters = set(string.ascii_uppercase).difference(letters)
         if not missing_letters:
             # One letter should be missing
             return False
@@ -937,7 +961,7 @@ def check_belleabsente(s: str, ref: str = None) -> bool:
                 # A forbidden letter have been found
                 return False
         # Remove unnecessary K, W, X, Y and Z
-        missing_letters = missing_letters.difference(set('kwxyz'))
+        missing_letters = missing_letters.difference(set('KWXYZ'))
         if len(missing_letters) > 1:
             # Several possible letters... There should be only one
             return False
@@ -1074,10 +1098,7 @@ def gematria_words(s: str, mapping='french_rank') -> list[int]:
     if not isinstance(mapping, dict) and mapping not in gematria_dict:
         raise ValueError(f"'mapping' argument must be in: {set(gematria_dict.keys())}")
     letter_to_value = gematria_dict[mapping]
-    words = [
-        word.upper()
-        for word in to_words(s, letters_only=True)
-    ]
+    words = to_words(s, letters_only=True)
 
     gematria_list = []
     for word in words:

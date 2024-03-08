@@ -20,14 +20,14 @@ class TestUtils(unittest.TestCase):
 
     def test_to_vowels(self):
         self.assertEqual(to_vowels(""), "")
-        self.assertEqual(to_vowels("fenouil"), "eoui")
-        self.assertEqual(to_vowels("Oiseau"), "oieau")
-        self.assertEqual(to_vowels("Être hébété, oui."), "eeeeeoui")
+        self.assertEqual(to_vowels("fenouil"), "EOUI")
+        self.assertEqual(to_vowels("Oiseau"), "OIEAU")
+        self.assertEqual(to_vowels("Être hébété, oui."), "EEEEEOUI")
 
     def test_to_consonants(self):
         self.assertEqual(to_consonants(""), "")
-        self.assertEqual(to_consonants("fenouil"), "fnl")
-        self.assertEqual(to_consonants("Un joli jalapeño."), "njljlpn")
+        self.assertEqual(to_consonants("fenouil"), "FNL")
+        self.assertEqual(to_consonants("Un joli jalapeño."), "NJLJLPN")
 
     def test_to_words(self):
         self.assertEqual(to_words(""), [])
